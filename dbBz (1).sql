@@ -12,10 +12,6 @@ create table scarpe(
     idScarpa int primary key auto_increment,
     nome varchar(255) not null,
     styleCode varchar(50),  
-    FK_imgPath varchar(255),
-    foreign key (FK_imgPath) references immagini(imgPath)
-        on delete set null
-        on update cascade,
     unique(styleCode)
 );
 
@@ -23,6 +19,10 @@ create table siti(
     idSito int primary key auto_increment,
     domain varchar(255) NOT NULL,
     linkScarpa varchar(255) NOT NULL,
+    FK_img int,
+    foreign key (FK_img) references immagini(idImmagine)
+        on delete set null
+        on update cascade,
     prezzoMedio int NOT NULL
 );
 
@@ -38,16 +38,14 @@ create table inserita(
         on update cascade
 );
 
-create table prezzi(
-    idPrezzo int primary key auto_increment,
-    prezzo int not null check(prezzo > 0),
-    taglia int not null check(taglia > 30 and taglia < 53),
-    FK_sito int not null,
-    foreign key (FK_sito) references siti(idSito)
-        on delete set null
-        on update cascade
-);
-
-insert value into 
-
+--
+--create table prezzi(
+--    idPrezzo int primary key auto_increment,
+--    prezzo int not null check(prezzo > 0),
+--    taglia int not null check(taglia > 30 and taglia < 53),
+--    FK_sito int not null,
+--    foreign key (FK_sito) references siti(idSito)
+--        on delete set null
+--        on update cascade
+--);
 

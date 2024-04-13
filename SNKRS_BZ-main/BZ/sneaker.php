@@ -1,6 +1,5 @@
 <?php
-
-
+    include("connect.php")
 
 
 
@@ -113,15 +112,15 @@
           </div>
         </div>
         <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="images/p2.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Watch
-                </h6>
+            <div class="box">
+                <a href="">
+                <div class="img-box">
+                    <img src="images/p2.png" alt="">
+                </div>
+                <div class="detail-box">
+                    <h6>
+                    Watch
+                    </h6>
                 <h6>
                   Price
                   <span>

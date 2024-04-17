@@ -1,7 +1,73 @@
 <?php
-    include("connect.php")
+  include("connect.php");
 
+  $sql="select * from  immagini";
+  $data=eseguiquery($sql);
+  //print_r($data);
+ 
+  //print $data[1]["imgPath"];
+  
+  //print($img);
 
+  $sql="select siti.prezzoMedio, siti.linkScarpa, scarpe.nome, immagini.imgPath
+        from siti
+        inner join inserita i on i.idInserit=siti.idSito
+        inner join scarpe on scarpe.idScarpa=i.idInserit
+        inner join immagini on siti.idSito=immagini.idImmagine";
+  $data=eseguiquery($sql);
+  print_r($data);
+
+  $html="<a href=>
+          <div class='img-box'>
+            <img src= alt='errore'>
+          </div>
+          <div class='detail-box'>
+            <h6> </h6>
+            <h6>
+              Price
+              <span>
+               
+              </span>
+            </h6>
+          </div>
+          <div class='new'>
+            <span>
+              New
+            </span>
+          </div>
+        </a>"
+
+  for($i=0;$i<count($data); $i++){
+
+    $img=$data[$i]["imgPath"];
+    $prezzo=$data[0]["prezzoMedio"];
+    $link=$data[0]["linkScarpa"];
+
+    $nome=$data[0]["nome"];
+    if(strlen($nome)>15){
+      $nome=substr($data[0]["nome"], 0, 15)."...";
+    }
+    $html="<a href=>
+          <div class='img-box'>
+            <img src={} alt='errore'>
+          </div>
+          <div class='detail-box'>
+            <h6> </h6>
+            <h6>
+              Price
+              <span>
+               
+              </span>
+            </h6>
+          </div>
+          <div class='new'>
+            <span>
+              New
+            </span>
+          </div>
+        </a>"
+
+  }
 
 ?>
 
@@ -88,18 +154,16 @@
       <div class="row">
         <div class="col-sm-6 col-md-4 col-lg-3">
           <div class="box">
-            <a href="">
+            <a href=<?php echo $link ?>>
               <div class="img-box">
-                <img src="images/p1.png" alt="">
+                <img src=<?php echo $img ?> alt="errore">
               </div>
               <div class="detail-box">
-                <h6>
-                  Ring
-                </h6>
+                <h6> <?php echo $nome ?> </h6>
                 <h6>
                   Price
                   <span>
-                    $200
+                    <?php echo $prezzo ?>
                   </span>
                 </h6>
               </div>
@@ -115,7 +179,7 @@
             <div class="box">
                 <a href="">
                 <div class="img-box">
-                    <img src="images/p2.png" alt="">
+                    <img src="images/Scarpe/Jordan_4_retro_bread_remagined.png" alt="">
                 </div>
                 <div class="detail-box">
                     <h6>

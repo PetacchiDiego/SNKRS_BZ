@@ -3,10 +3,8 @@
 
   $sql="select * from  immagini";
   $data=eseguiquery($sql);
-  //print_r($data);
  
   //print $data[1]["imgPath"];
-  
   //print($img);
 
   $sql="select siti.prezzoMedio, siti.linkScarpa, scarpe.nome, immagini.imgPath
@@ -15,7 +13,6 @@
         inner join scarpe on scarpe.idScarpa=i.idInserit
         inner join immagini on siti.idSito=immagini.idImmagine";
   $data=eseguiquery($sql);
-  print_r($data);
 
   $html="<a href=>
           <div class='img-box'>
@@ -35,28 +32,29 @@
               New
             </span>
           </div>
-        </a>"
+        </a>";
 
-  for($i=0;$i<count($data); $i++){
-
+  for($i = 0;$i < count($data);$i++){
+    echo $data[$i]["imgPath"];
     $img=$data[$i]["imgPath"];
     $prezzo=$data[0]["prezzoMedio"];
     $link=$data[0]["linkScarpa"];
+    $nome=$data[0]["nome"];
 
     $nome=$data[0]["nome"];
     if(strlen($nome)>15){
       $nome=substr($data[0]["nome"], 0, 15)."...";
     }
-    $html="<a href=>
+    $html="<a href='".$data[$i]["linkScarpa"]."'>
           <div class='img-box'>
-            <img src={} alt='errore'>
+            <img src={$data[$i]["imgPath"]} alt='errore'>
           </div>
           <div class='detail-box'>
-            <h6> </h6>
+            <h6> {$data[$i]['nome']}</h6>
             <h6>
               Price
               <span>
-               
+               ". $data[0]["prezzoMedio"]."
               </span>
             </h6>
           </div>
@@ -65,9 +63,12 @@
               New
             </span>
           </div>
-        </a>"
+        </a>";
+        echo $html;
 
   }
+
+  echo $html;
 
 ?>
 

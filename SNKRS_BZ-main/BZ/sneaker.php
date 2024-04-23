@@ -14,61 +14,40 @@
         inner join immagini on siti.idSito=immagini.idImmagine";
   $data=eseguiquery($sql);
 
-  $html="<a href=>
-          <div class='img-box'>
-            <img src= alt='errore'>
-          </div>
-          <div class='detail-box'>
-            <h6> </h6>
-            <h6>
-              Price
-              <span>
-               
-              </span>
-            </h6>
-          </div>
-          <div class='new'>
-            <span>
-              New
-            </span>
-          </div>
-        </a>";
 
+  $html = ""; 
   for($i = 0;$i < count($data);$i++){
-    echo $data[$i]["imgPath"];
-    $img=$data[$i]["imgPath"];
-    $prezzo=$data[0]["prezzoMedio"];
-    $link=$data[0]["linkScarpa"];
-    $nome=$data[0]["nome"];
-
+    
     $nome=$data[0]["nome"];
     if(strlen($nome)>15){
       $nome=substr($data[0]["nome"], 0, 15)."...";
     }
-    $html="<a href='".$data[$i]["linkScarpa"]."'>
-          <div class='img-box'>
-            <img src={$data[$i]["imgPath"]} alt='errore'>
+    $html.="
+        <div class='col-sm-6 col-md-4 col-lg-3'>
+          <div class='box'>
+            <a href='".$data[$i]["linkScarpa"]."'>
+              <div class='img-box'>
+                <img src={$data[$i]["imgPath"]} alt='errore'>
+              </div>
+              <div class='detail-box'>
+                <h6> {$nome}</h6>
+                <h6>
+                  Price
+                  <span>
+                  ". $data[0]["prezzoMedio"]."
+                  </span>
+                </h6>
+              </div>
+              <div class='new'>
+                <span>
+                  New
+                </span>
+              </div>
+            </a>
           </div>
-          <div class='detail-box'>
-            <h6> {$data[$i]['nome']}</h6>
-            <h6>
-              Price
-              <span>
-               ". $data[0]["prezzoMedio"]."
-              </span>
-            </h6>
-          </div>
-          <div class='new'>
-            <span>
-              New
-            </span>
-          </div>
-        </a>";
-        echo $html;
+        </div>";
 
   }
-
-  echo $html;
 
 ?>
 
@@ -152,28 +131,10 @@
           <button type="submit"><i class="fa fa-search"></i></button>
         </div>
       </div>
-      <div class="row">
+      <!--<div class="row">
         <div class="col-sm-6 col-md-4 col-lg-3">
           <div class="box">
-            <a href=<?php echo $link ?>>
-              <div class="img-box">
-                <img src=<?php echo $img ?> alt="errore">
-              </div>
-              <div class="detail-box">
-                <h6> <?php echo $nome ?> </h6>
-                <h6>
-                  Price
-                  <span>
-                    <?php echo $prezzo ?>
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
+            
           </div>
         </div>
         <div class="col-sm-6 col-md-4 col-lg-3">
@@ -350,7 +311,8 @@
               </div>
             </a>
           </div>
-        </div>
+        </div> -->
+        <?php echo $html ?>
       </div>
     </div>
   </section>

@@ -1,12 +1,6 @@
 <?php
   include("connect.php");
 
-  $sql="select * from  immagini";
-  $data=eseguiquery($sql);
- 
-  //print $data[1]["imgPath"];
-  //print($img);
-
   $sql="select siti.prezzoMedio, siti.linkScarpa, scarpe.nome, immagini.imgPath
         from siti
         inner join inserita i on i.idInserit=siti.idSito
@@ -14,14 +8,14 @@
         inner join immagini on siti.idSito=immagini.idImmagine";
 
   $data=eseguiquery($sql);
-
-  print_r($data);
+  //print_r($data);
   $html = ""; 
   for($i = 0;$i < count($data);$i++){
     
-    $nome=$data[0]["nome"];
+    $nome=$data[$i]["nome"];
+    
     if(strlen($nome)>15){
-      $nome=substr($data[0]["nome"], 0, 15)."...";
+      $nome=substr($data[$i]["nome"], 0, 15)."...";
     }
     $html.="
         <div class='col-sm-6 col-md-4 col-lg-3'>
@@ -35,7 +29,7 @@
                 <h6>
                   Price
                   <span>
-                  ". $data[0]["prezzoMedio"]."
+                  ". $data[$i]["prezzoMedio"]."
                   </span>
                 </h6>
               </div>
@@ -132,188 +126,11 @@
           <button type="submit"><i class="fa fa-search"></i></button>
         </div>
       </div>
-      <!--<div class="row">
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="box">
-                <a href="">
-                <div class="img-box">
-                    <img src="images/Scarpe/Jordan_4_retro_bread_remagined.png" alt="">
-                </div>
-                <div class="detail-box">
-                    <h6>
-                    Watch
-                    </h6>
-                <h6>
-                  Price
-                  <span>
-                    $300
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="images/p3.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Teddy Bear
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $110
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="images/p4.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Flower Bouquet
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $45
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="images/p5.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Teddy Bear
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $95
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="images/p6.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Flower Bouquet
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $70
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="images/p7.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Watch
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $400
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="images/p8.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Ring
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $450
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div> -->
+      <div class="row">
+        
         <?php echo $html ?>
+
+
       </div>
     </div>
   </section>

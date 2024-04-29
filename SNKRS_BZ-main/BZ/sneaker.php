@@ -12,9 +12,10 @@
         inner join inserita i on i.idInserit=siti.idSito
         inner join scarpe on scarpe.idScarpa=i.idInserit
         inner join immagini on siti.idSito=immagini.idImmagine";
+
   $data=eseguiquery($sql);
 
-
+  print_r($data);
   $html = ""; 
   for($i = 0;$i < count($data);$i++){
     

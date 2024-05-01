@@ -77,7 +77,7 @@
 		<!-- sezione header -->
 		<header class="header_section">
 		  <nav class="navbar navbar-expand-lg custom_nav-container ">
-			<a class="navbar-brand" href="home.html">
+			<a class="navbar-brand" href="home.php">
 			  <span>
 				snkrs BZ
 			  </span>
@@ -91,7 +91,7 @@
 			<div class="collapse navbar-collapse  innerpage_navbar" id="navbarSupportedContent">
 			  <ul class="navbar-nav  ">
 				<li class="nav-item">
-				  <a class="nav-link" href="home.html">Home</span></a>
+				  <a class="nav-link" href="home.php">Home</span></a>
 				</li>
 				<li class="nav-item active">
 				  <a class="nav-link" href="sneaker.html">

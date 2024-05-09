@@ -1,11 +1,14 @@
 <?php
     include("connect.php");
 
-    $sql="select siti.prezzoMedio, siti.linkScarpa, scarpe.nome, immagini.imgPath
-        from siti
-        inner join inserita i on i.idInserit=siti.idSito
-        inner join scarpe on scarpe.idScarpa=i.idInserit
-        inner join immagini on siti.idSito=immagini.idImmagine";
+    $sql="select s.idScarpa, i.idItem, i.styleCode, i.nome, 
+          imm.idImmagine, imm.imgPath, sit.domain, inser.prezzoMedio, 
+          inser.linkScarpa
+          from item i
+          inner join immagini imm on imm.FK_idItem = i.idItem
+          inner join inserita inser on inser.idInserit=i.idItem
+          inner join siti sit on sit.idSito = inser.FK_idSito
+          inner join scarpe s on s.FK_idItem = i.idItem";
 
     $data=eseguiquery($sql);
     //print_r($data);
@@ -25,9 +28,9 @@
     for($i = 0;$i < 4;$i++){
       
       $index=$numeriCasuali[$i];
-
+      print $index;
       $nome=$data[$index]["nome"];
-    
+      print $nome;
       if(strlen($nome)>15){
           $nome=substr($data[$index]["nome"], 0, 15)."...";
       }
@@ -180,7 +183,7 @@
             </h2>
           </div>
           <div class="row">
-            
+            <!-- Output scarpe -->
             <?php echo $html; ?>
             
           </div>

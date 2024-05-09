@@ -12,7 +12,7 @@ values(1, "Jordan 4 retro bread remaigined","FV5029-006"),
 (4, "Air Jordan x Travis Scott 1 Low Golf 'Neutral Olive' (2023)","FZ3124-200"),
 (5, "Nike SB x The Powerpuff Girls Dunk Low 'Bubbles' (2023)","FZ8320-400");
 
-insert into scarpe(FK_idScarpa)
+insert into scarpe(FK_idItem)
 values (1),
 (2),
 (3),

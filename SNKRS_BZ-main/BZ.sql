@@ -89,10 +89,10 @@ values (10),
 
 
 insert into immagini(idImmagine, imgPath, FK_idItem)
-values (10, "images\Scarpe\Air_Jordan_4_Military_Blue_Industrial Blue_(2024)", 10),
+values (10, "images\Scarpe\Air_Jordan_4_Military_Blue_Industrial_Blue_(2024)", 10),
 (11, "images\Scarpe\Air_Jordan_3_Craft_Ivory_(2024).png", 11),
 (12, "images\Scarpe\Nike_x_Parra_SB_Dunk_Low_Abstract_Art_(2021)", 12),
-(13, "images\Scarpe\Yeezy_Slide _Pure", 13),
+(13, "images\Scarpe\Yeezy_Slide_Pure", 13),
 (14, "images\Scarpe\Yeezy_Boost_700_Wave_Runner", 14);
 
 insert into inserita(FK_idSito, FK_idItem, prezzoMedio, linkScarpa)

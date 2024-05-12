@@ -1,17 +1,17 @@
 <?php
-  include("connect.php");
+	include("connect.php");
 
-  $sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
-		from item i
-		inner join inserita ins on i.idItem=ins.FK_idItem
-		inner join immagini immg on immg.FK_idItem=i.idItem
-		inner join siti s on s.idSito=ins.FK_idSito
-		inner join scarpe scarp on scarp.FK_idItem=i.idItem";
+	$sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
+			from item i
+			inner join inserita ins on i.idItem=ins.FK_idItem
+			inner join immagini immg on immg.FK_idItem=i.idItem
+			inner join siti s on s.idSito=ins.FK_idSito
+			inner join scarpe scarp on scarp.FK_idItem=i.idItem";
 
-  $data=eseguiquery($sql);
-  //print_r($data);
-  $html = ""; 
-  for($i = 0;$i < count($data);$i++){
+	$data=eseguiquery($sql);
+	//print_r($data);
+	$html = ""; 
+	for($i = 0;$i < count($data);$i++){
     
     $nome=$data[$i]["nome"];
     

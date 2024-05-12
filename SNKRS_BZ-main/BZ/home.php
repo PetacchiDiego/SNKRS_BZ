@@ -1,16 +1,15 @@
 <?php
     include("connect.php");
 
-    $sql="select s.idScarpa, i.idItem, i.styleCode, i.nome, 
-          imm.idImmagine, imm.imgPath, sit.domain, inser.prezzoMedio, 
-          inser.linkScarpa
+    $sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
           from item i
-          inner join immagini imm on imm.FK_idItem = i.idItem
-          inner join inserita inser on inser.idInserit=i.idItem
-          inner join siti sit on sit.idSito = inser.FK_idSito
-          inner join scarpe s on s.FK_idItem = i.idItem";
+          inner join inserita ins on i.idItem=ins.FK_idItem
+          inner join immagini immg on immg.FK_idItem=i.idItem
+          inner join siti s on s.idSito=ins.FK_idSito
+          inner join scarpe scarp on scarp.FK_idItem=i.idItem";
 
     $data=eseguiquery($sql);
+
     //print_r($data);
 
     $html = ""; 
@@ -24,13 +23,22 @@
     $cut= 8;
     $numeriCasuali = array_slice($numeri, 0, $cut); 
     //print_r($numeriCasuali);
-
+    $arrIdusati=array();
     for($i = 0;$i < 4;$i++){
       
       $index=$numeriCasuali[$i];
-      print $index;
+      if($i!=0){
+        while(in_array($data[$index]["idItem"], $arrIdusati)==true){
+          $index=$numeriCasuali[$i];
+        }
+
+      }
+      else{
+        array_push($arrIdusati, $data[$index]["idItem"]);
+      }
+      //print $index;
       $nome=$data[$index]["nome"];
-      print $nome;
+      //print $nome;
       if(strlen($nome)>15){
           $nome=substr($data[$index]["nome"], 0, 15)."...";
       }
@@ -120,7 +128,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="vestiario.html">
+                  <a class="nav-link" href="vestiario.php">
                     Vestiario
                   </a>
                 </li>

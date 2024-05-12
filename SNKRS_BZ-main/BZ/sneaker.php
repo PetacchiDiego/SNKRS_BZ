@@ -1,11 +1,12 @@
 <?php
   include("connect.php");
 
-  $sql="select siti.prezzoMedio, siti.linkScarpa, scarpe.nome, immagini.imgPath
-        from siti
-        inner join inserita i on i.idInserit=siti.idSito
-        inner join scarpe on scarpe.idScarpa=i.idInserit
-        inner join immagini on siti.idSito=immagini.idImmagine";
+  $sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
+		from item i
+		inner join inserita ins on i.idItem=ins.FK_idItem
+		inner join immagini immg on immg.FK_idItem=i.idItem
+		inner join siti s on s.idSito=ins.FK_idSito
+		inner join scarpe scarp on scarp.FK_idItem=i.idItem";
 
   $data=eseguiquery($sql);
   //print_r($data);
@@ -17,6 +18,14 @@
     if(strlen($nome)>15){
       $nome=substr($data[$i]["nome"], 0, 15)."...";
     }
+
+	if($data[$i]["idSito"]==1){
+		$srcLogo="images/LogoSite/logoStokX.png";
+	}
+	else{
+		$srcLogo="images/LogoSite/logoKlekt.png";
+	}
+
     $html.="
         <div class='col-sm-6 col-md-4 col-lg-3'>
           <div class='box'>
@@ -33,17 +42,18 @@
                   </span>
                 </h6>
               </div>
-              <div class='new'>
-                <span>
-                  New
+              <div >
+                <span class='new'>
+                  <img src={$srcLogo} style='width:70%'>
                 </span>
               </div>
             </a>
           </div>
         </div>";
 
-  }
+  	}
 
+	
 ?>
 
 <!DOCTYPE html>
@@ -99,7 +109,7 @@
 				  </a>
 				</li>
 				<li class="nav-item">
-				  <a class="nav-link" href="vestiario.html">
+				  <a class="nav-link" href="vestiario.php">
 					Vestiario
 				  </a>
 				</li>
@@ -118,22 +128,24 @@
 
 	</div>
 
-  <section class="shop_section layout_padding">
-    <div class="container">
-      <div class="heading_container heading_center">
-        <div class="topnav">
-          <input type="text" placeholder="Cerca.." name="search">
-          <button type="submit"><i class="fa fa-search"></i></button>
-        </div>
-      </div>
-      <div class="row">
-        
-        <?php echo $html ?>
+  	<section class="shop_section layout_padding">
+		<div class="container">
+			<div class="heading_container heading_center">
+				<div class="topnav">
+					<form method="GET" action="sneakerRicerca.php">
+						<input type="text" placeholder="Cerca.." name="search">
+						<button type="submit" ><i class="fa fa-search"></i></button>
+					</form>
+				</div>
+			</div>
+			<div class="row">
+				
+				<?php echo $html ?>
 
 
-      </div>
-    </div>
-  </section>
+			</div>
+		</div>
+ 	</section>
 
 
 	<!-- footer -->

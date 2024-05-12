@@ -10,8 +10,7 @@ create table siti(
 create table item(
     idItem int primary key auto_increment,
     nome varchar(255) not null,
-    styleCode varchar(255),  
-    unique(styleCode)
+    styleCode varchar(255)
 );
 
 create table immagini(
@@ -35,7 +34,7 @@ create table inserita(
         on delete set null
         on update cascade,
     prezzoMedio int NOT NULL,
-    linkScarpa varchar(255) NOT NULL
+    linkScarpa varchar(255) NOT NULL -- modifica con link item
 );
 
 create table scarpe(

@@ -1,60 +1,72 @@
 <?php
   include("connect.php");
 
-  $sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, vest.idVestiario
-    from item i
-    inner join inserita ins on i.idItem=ins.FK_idItem
-    inner join immagini immg on immg.FK_idItem=i.idItem
-    inner join siti s on s.idSito=ins.FK_idSito
-    inner join vestiario vest on vest.FK_idItem=i.idItem";
+  if ($_SERVER["REQUEST_METHOD"] == "GET") {
+		
+	if (isset($_GET['search'])) {
+		
+		$name = $_GET['search'];
+		
+		$sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, vest.idVestiario
+		from item i
+		inner join inserita ins on i.idItem=ins.FK_idItem
+		inner join immagini immg on immg.FK_idItem=i.idItem
+		inner join siti s on s.idSito=ins.FK_idSito
+		inner join vestiario vest on vest.FK_idItem=i.idItem
+		where i.nome like '%$name%'";
+        
 
-  $data=eseguiquery($sql);
-  //print_r($data);
-  $html = ""; 
-  for($i = 0;$i < count($data);$i++){
-    
-    $nome=$data[$i]["nome"];
-    
-    if(strlen($nome)>15){
-      $nome=substr($data[$i]["nome"], 0, 15)."...";
-    }
+		$data=eseguiquery($sql);
+		//print_r($data);
 
-    if($data[$i]["idSito"]==1){
-      $srcLogo="images/LogoSite/logoStokX.png";
-    }
-    else{
-      $srcLogo="images/LogoSite/logoKlekt.png";
-    }
+		$html = ""; 
+  		for($i = 0;$i < count($data);$i++){
+		
+		$nome=$data[$i]["nome"];
+		
+		if(strlen($nome)>15){
+			$nome=substr($data[$i]["nome"], 0, 15)."...";
+		}
 
-    $html.="
-        <div class='col-sm-6 col-md-4 col-lg-3'>
-          <div class='box'>
-            <a href='".$data[$i]["linkScarpa"]."'>
-              <div class='img-box'>
-                <img src={$data[$i]["imgPath"]} alt='errore'>
-              </div>
-              <div class='detail-box'>
-                <h6> {$nome}</h6>
-                <h6>
-                  Price
-                  <span>
-                  ". $data[$i]["prezzoMedio"]."
-                  </span>
-                </h6>
-              </div>
-              <div >
-                <span class='new'>
-                  <img src={$srcLogo} style='width:70%'>
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>";
+		if($data[$i]["idSito"]==1){
+			$srcLogo="images/LogoSite/logoStokX.png";
+		}
+		else{
+			$srcLogo="images/LogoSite/logoKlekt.png";
+		}
 
-  }
+		$html.="
+			<div class='col-sm-6 col-md-4 col-lg-3'>
+			<div class='box'>
+				<a href='".$data[$i]["linkScarpa"]."'>
+				<div class='img-box'>
+					<img src={$data[$i]["imgPath"]} alt='errore'>
+				</div>
+				<div class='detail-box'>
+					<h6> {$nome}</h6>
+					<h6>
+					Price
+					<span>
+					". $data[$i]["prezzoMedio"]."
+					</span>
+					</h6>
+				</div>
+				<div >
+					<span class='new'>
+					<img src={$srcLogo} style='width:70%'>
+					</span>
+				</div>
+				</a>
+			</div>
+			</div>";
 
+		}
 
-
+		} else {
+			echo "Errore nella ricerca criterio non valido ";
+		
+		}
+	}
 
 ?>
 
@@ -72,7 +84,7 @@
   <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
 
   <title>
-    vestiario
+    sneaker
   </title>
 
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
@@ -130,12 +142,11 @@
 
 	</div>
 
-
-  <section class="shop_section layout_padding">
+  	<section class="shop_section layout_padding">
 		<div class="container">
 			<div class="heading_container heading_center">
 				<div class="topnav">
-					<form method="GET" action="vestiarioRicerca.php">
+					<form method="GET" action="sneaker.php">
 						<input type="text" placeholder="Cerca.." name="search">
 						<button type="submit" ><i class="fa fa-search"></i></button>
 					</form>
@@ -145,11 +156,18 @@
 				
 				<?php echo $html ?>
 
-
 			</div>
-		</div>
- 	</section>
 
+			<div class="btn-box" style="align: center">
+            	<a href="vestiario.php">
+            	 	Back to all 
+        	    </a>
+			</div>
+
+		</div>
+  	</section>
+
+  	
 
 	<!-- footer -->
 	<section class="info_section  layout_padding2-top">

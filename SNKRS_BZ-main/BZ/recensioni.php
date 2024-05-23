@@ -16,8 +16,8 @@
   </title>
 
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-  <link href="css/style.css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css?ts=<?php echo time(); ?>" />
+  <link href="css/style.css?ts=<?php echo time(); ?>" rel="stylesheet" />
   <link href="css/responsive.css" rel="stylesheet" />
   
 </head>
@@ -56,12 +56,12 @@
 				  </a>
 				</li>
 				<li class="nav-item active">
-				  <a class="nav-link" href="recensioni.html">
+				  <a class="nav-link" href="recensioni.php">
 					Recensioni <span class="sr-only">(current)
 				  </a>
 				</li>
 				<li class="nav-item">
-				  <a class="nav-link" href="chi-siamo.html">Chi siamo</a>
+				  <a class="nav-link" href="chi-siamo.php">Chi siamo</a>
 				</li>
 			  </ul>
 			</div>

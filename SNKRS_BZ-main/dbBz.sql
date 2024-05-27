@@ -10,7 +10,8 @@ create table siti(
 create table item(
     idItem int primary key auto_increment,
     nome varchar(255) not null,
-    styleCode varchar(255)
+    styleCode varchar(255),
+    colore varchar(255)
 );
 
 create table immagini(

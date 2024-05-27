@@ -55,6 +55,11 @@
 					Vestiario
 				  </a>
 				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="outfit.php">
+					Outfit
+				  </a>
+				</li>
 				<li class="nav-item active">
 				  <a class="nav-link" href="recensioni.php">
 					Recensioni <span class="sr-only">(current)

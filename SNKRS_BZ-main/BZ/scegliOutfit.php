@@ -1,73 +1,46 @@
 <?php
-  include("connect.php");
+	include("connect.php");
 
-  if ($_SERVER["REQUEST_METHOD"] == "GET") {
-		
-	if (isset($_GET['search'])) {
-		
-		$name = $_GET['search'];
-		
-		$sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
-		from item i
-		inner join inserita ins on i.idItem=ins.FK_idItem
-		inner join immagini immg on immg.FK_idItem=i.idItem
-		inner join siti s on s.idSito=ins.FK_idSito
-		inner join scarpe scarp on scarp.FK_idItem=i.idItem
-		where i.nome like '%$name%'";
+	$sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
+			from item i
+			inner join inserita ins on i.idItem=ins.FK_idItem
+			inner join immagini immg on immg.FK_idItem=i.idItem
+			inner join siti s on s.idSito=ins.FK_idSito
+			inner join scarpe scarp on scarp.FK_idItem=i.idItem";
+
+	$data=eseguiquery($sql);
+	//print_r($data);
+	$html = ""; 
+	for($i = 0;$i < count($data);$i++){
+    
+    $nome=$data[$i]["nome"];
+    
+    if(strlen($nome)>40){
+      $nome=substr($data[$i]["nome"], 0, 40)."...";
+    }
+
+	if($data[$i]["idSito"]==1){
         
-
-		$data=eseguiquery($sql);
-		//print_r($data);
-
-		$html = ""; 
-  		for($i = 0;$i < count($data);$i++){
-		
-		$nome=$data[$i]["nome"];
-		
-		if(strlen($nome)>15){
-			$nome=substr($data[$i]["nome"], 0, 15)."...";
-		}
-
-		if($data[$i]["idSito"]==1){
-			$srcLogo="images/LogoSite/logoStokX.png";
-		}
-		else{
-			$srcLogo="images/LogoSite/logoKlekt.png";
-		}
-
 		$html.="
-			<div class='col-sm-6 col-md-4 col-lg-3'>
-			<div class='box'>
-				<a href='".$data[$i]["linkScarpa"]."'>
-				<div class='img-box'>
-					<img src={$data[$i]["imgPath"]} alt='errore'>
-				</div>
-				<div class='detail-box'>
-					<h6> {$nome}</h6>
-					<h6>
-					Price
-					<span>
-					". $data[$i]["prezzoMedio"]."
-					</span>
-					</h6>
-				</div>
-				<div >
-					<span class='new'>
-					<img src={$srcLogo} style='width:70%'>
-					</span>
-				</div>
-				</a>
-			</div>
-			</div>";
-
-		}
-
-		} else {
-			echo "Errore nella ricerca criterio non valido ";
-		
-		}
+        <div class='col-sm-6 col-md-4 col-lg-3'>
+          <div class='box'>
+            <a href='scegliOutfit.php'>
+              <div class='img-box'>
+                <img src={$data[$i]["imgPath"]} alt='errore'>
+              </div>
+              <div class='detail-box'>
+                <h6> {$nome}</h6>
+                <h6>
+                </h6>
+              </div>
+            </a>
+          </div>
+        </div>";
 	}
 
+  	}
+
+	
 ?>
 
 <!DOCTYPE html>
@@ -84,13 +57,13 @@
   <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
 
   <title>
-    sneaker
+    outfit
   </title>
 
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
 
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-  <link href="css/style.css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css?ts=<?php echo time(); ?>" />
+  <link href="css/style.css?ts=<?php echo time(); ?>" rel="stylesheet" />
   <link href="css/responsive.css" rel="stylesheet" />
 </head>
 
@@ -117,9 +90,9 @@
 				<li class="nav-item">
 				  <a class="nav-link" href="home.php">Home</span></a>
 				</li>
-				<li class="nav-item active">
+				<li class="nav-item">
 				  <a class="nav-link" href="sneaker.php">
-					Sneakers <span class="sr-only">(current)
+					Sneakers <span class="sr-only">
 				  </a>
 				</li>
 				<li class="nav-item">
@@ -127,9 +100,9 @@
 					Vestiario
 				  </a>
 				</li>
-				<li class="nav-item">
+                <li class="nav-item active">
 				  <a class="nav-link" href="outfit.php">
-					Outfit
+					Outfit <span class="sr-only">(current)
 				  </a>
 				</li>
 				<li class="nav-item">
@@ -147,11 +120,14 @@
 
 	</div>
 
+    
+
   	<section class="shop_section layout_padding">
 		<div class="container">
 			<div class="heading_container heading_center">
 				<div class="topnav">
-					<form method="GET" action="sneaker.php">
+                <p> Cerca la scarpa e scegli tra gli outift che ti proponiamo da abbinarci.</p>
+					<form method="GET" action="sneakerRicerca.php">
 						<input type="text" placeholder="Cerca.." name="search">
 						<button type="submit" ><i class="fa fa-search"></i></button>
 					</form>
@@ -161,18 +137,11 @@
 				
 				<?php echo $html ?>
 
-			</div>
 
-			<div class="btn-box" style="align: center">
-            	<a href="sneaker.php">
-            	 	Back to all 
-        	    </a>
 			</div>
-
 		</div>
-  	</section>
+ 	</section>
 
-  	
 
 	<!-- footer -->
 	<section class="info_section  layout_padding2-top">

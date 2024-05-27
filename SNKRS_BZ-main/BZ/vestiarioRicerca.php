@@ -128,12 +128,17 @@
 				  </a>
 				</li>
 				<li class="nav-item">
-				  <a class="nav-link" href="recensioni.html">
+				  <a class="nav-link" href="outfit.php">
+					Outfit
+				  </a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="recensioni.php">
 					Recensioni
 				  </a>
 				</li>
 				<li class="nav-item">
-				  <a class="nav-link" href="chi-siamo.html">Chi siamo</a>
+				  <a class="nav-link" href="chi-siamo.php">Chi siamo</a>
 				</li>
 			  </ul>
 			</div>

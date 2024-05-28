@@ -1,45 +1,107 @@
 <?php
 	include("connect.php");
 
-	$sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
+	if ($_SERVER["REQUEST_METHOD"] == "GET") {
+		
+		if (isset($_GET['search'])) {
+			
+			$name = $_GET['search'];
+
+			$sql1="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
 			from item i
 			inner join inserita ins on i.idItem=ins.FK_idItem
 			inner join immagini immg on immg.FK_idItem=i.idItem
 			inner join siti s on s.idSito=ins.FK_idSito
-			inner join scarpe scarp on scarp.FK_idItem=i.idItem";
+			inner join scarpe scarp on scarp.FK_idItem=i.idItem
+			where i.nome like '%$name%'";
+
+			$data=eseguiquery($sql1);
+			//print_r($data);
+			$html1 = ""; 
+			for($i = 0;$i < count($data);$i++){
+			
+			$nome=$data[$i]["nome"];
+			
+			if(strlen($nome)>40){
+			$nome=substr($data[$i]["nome"], 0, 40)."...";
+			}
+
+			if($data[$i]["idSito"]==1){
+				$html1.="
+				<div class='col-sm-6 col-md-4 col-lg-3'>
+				<div class='box'>
+					<a href='".$data[$i]["linkScarpa"]."'>
+					<span>
+						Scarpa selezionata
+					</span>
+					<div class='img-box'>
+						<img src={$data[$i]["imgPath"]} alt='errore'>
+					</div>
+					<div class='detail-box'>
+						<h6> {$nome}</h6>
+						<h6>
+						</h6>
+					</div>
+					
+					</a>
+				</div>
+				</div>";
+			}
+
+			}
+		}}
+		
+	$sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, vest.idVestiario
+	from item i
+	inner join inserita ins on i.idItem=ins.FK_idItem
+	inner join immagini immg on immg.FK_idItem=i.idItem
+	inner join siti s on s.idSito=ins.FK_idSito
+	inner join vestiario vest on vest.FK_idItem=i.idItem";
 
 	$data=eseguiquery($sql);
 	//print_r($data);
 	$html = ""; 
 	for($i = 0;$i < count($data);$i++){
-    
-    $nome=$data[$i]["nome"];
-    
-    if(strlen($nome)>40){
-      $nome=substr($data[$i]["nome"], 0, 40)."...";
-    }
+		
+		$nome=$data[$i]["nome"];
+		
+		if(strlen($nome)>15){
+		$nome=substr($data[$i]["nome"], 0, 15)."...";
+		}
 
-	if($data[$i]["idSito"]==1){
-        
+		if($data[$i]["idSito"]==1){
+		$srcLogo="images/LogoSite/logoStokX.png";
+		}
+		else{
+		$srcLogo="images/LogoSite/logoKlekt.png";
+		}
+
 		$html.="
-        <div class='col-sm-6 col-md-4 col-lg-3'>
-          <div class='box'>
-            <a href='scegliOutfit.php'>
-              <div class='img-box'>
-                <img src={$data[$i]["imgPath"]} alt='errore'>
-              </div>
-              <div class='detail-box'>
-                <h6> {$nome}</h6>
-                <h6>
-                </h6>
-              </div>
-            </a>
-          </div>
-        </div>";
+			<div class='col-sm-6 col-md-4 col-lg-3'>
+			<div class='box'>
+				<a href='".$data[$i]["linkScarpa"]."'>
+				<div class='img-box'>
+					<img src={$data[$i]["imgPath"]} alt='errore'>
+				</div>
+				<div class='detail-box'>
+					<h6> {$nome}</h6>
+					<h6>
+					Price
+					<span>
+					". $data[$i]["prezzoMedio"]."
+					</span>
+					</h6>
+				</div>
+				<div >
+					<span class='new'>
+					<img src={$srcLogo} style='width:70%'>
+					</span>
+				</div>
+				</a>
+			</div>
+			</div>";
+
 	}
-
-  	}
-
 	
 ?>
 
@@ -124,20 +186,14 @@
 
   	<section class="shop_section layout_padding">
 		<div class="container">
-			<div class="heading_container heading_center">
+		<div class="heading_container heading_center">
 				<div class="topnav">
-                <p> Cerca la scarpa e scegli tra gli outift che ti proponiamo da abbinarci.</p>
-					<form method="GET" action="sneakerRicerca.php">
-						<input type="text" placeholder="Cerca.." name="search">
-						<button type="submit" ><i class="fa fa-search"></i></button>
-					</form>
+                <p> Qui puoi trovare la scarpa da te selezionata e i vestiti da poterci abbinare, sbizzarrisciti !!!</p>
 				</div>
 			</div>
 			<div class="row">
-				
-				<?php echo $html ?>
-
-
+				<?php echo $html1; ?>
+				<?php echo $html; ?>
 			</div>
 		</div>
  	</section>

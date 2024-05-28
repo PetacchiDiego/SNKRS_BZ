@@ -26,10 +26,10 @@
           <div class='box'>
             <a href='scegliOutfit.php'>
               <div class='img-box'>
-                <img src={$data[$i]["imgPath"]} alt='errore'>
+                <img src={$data[$i]["imgPath"]} alt='errore' >
               </div>
               <div class='detail-box'>
-                <h6> {$nome}</h6>
+                <h6 > {$nome}</h6>
                 <h6>
                 </h6>
               </div>
@@ -127,7 +127,7 @@
 			<div class="heading_container heading_center">
 				<div class="topnav">
                 <p> Cerca la scarpa e scegli tra gli outift che ti proponiamo da abbinarci.</p>
-					<form method="GET" action="sneakerRicerca.php">
+					<form method="GET" action="scegliOutfit.php">
 						<input type="text" placeholder="Cerca.." name="search">
 						<button type="submit" ><i class="fa fa-search"></i></button>
 					</form>

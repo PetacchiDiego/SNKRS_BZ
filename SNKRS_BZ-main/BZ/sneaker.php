@@ -27,29 +27,29 @@
 	}
 
     $html.="
-        <div class='col-sm-6 col-md-4 col-lg-3'>
-          <div class='box'>
-            <a href='".$data[$i]["linkScarpa"]."'>
-              <div class='img-box'>
-                <img src={$data[$i]["imgPath"]} alt='errore'>
-              </div>
-              <div class='detail-box'>
-                <h6> {$nome}</h6>
-                <h6>
-                  Price
-                  <span>
-                  ". $data[$i]["prezzoMedio"]."
-                  </span>
-                </h6>
-              </div>
-              <div >
-                <span class='new'>
-                  <img src={$srcLogo} style='width:70%'>
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>";
+		<div class='col-sm-6 col-md-4 col-lg-3'>
+		<div class='box'>
+		<a href='".$data[$i]["linkScarpa"]."'>
+			<div class='img-box'>
+			<img src={$data[$i]["imgPath"]} alt='errore'>
+			</div>
+			<div class='detail-box'>
+			<h6> {$nome}</h6>
+			<h6>
+				Price
+				<span>
+				". $data[$i]["prezzoMedio"]."
+				</span>
+			</h6>
+			</div>
+			<div >
+			<span class='new'>
+				<img src={$srcLogo} style='width:70%'>
+			</span>
+			</div>
+		</a>
+		</div>
+	</div>";
 
   	}
 

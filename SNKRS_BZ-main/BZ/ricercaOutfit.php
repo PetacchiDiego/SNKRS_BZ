@@ -1,12 +1,19 @@
 <?php
-	include("connect.php");
+    include("connect.php");
+
+    if ($_SERVER["REQUEST_METHOD"] == "GET") {
+		
+		if (isset($_GET['search'])) {
+			
+			$name = $_GET['search'];
 
 	$sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
-			from item i
-			inner join inserita ins on i.idItem=ins.FK_idItem
-			inner join immagini immg on immg.FK_idItem=i.idItem
-			inner join siti s on s.idSito=ins.FK_idSito
-			inner join scarpe scarp on scarp.FK_idItem=i.idItem";
+		from item i
+		inner join inserita ins on i.idItem=ins.FK_idItem
+		inner join immagini immg on immg.FK_idItem=i.idItem
+		inner join siti s on s.idSito=ins.FK_idSito
+		inner join scarpe scarp on scarp.FK_idItem=i.idItem
+		where i.nome like '%$name%'";
 
 	$data=eseguiquery($sql);
 	//print_r($data);
@@ -40,10 +47,10 @@
 	}
 
   	}
+}}
 
 	
 ?>
-
 <!DOCTYPE html>
 <html>
 
@@ -128,15 +135,16 @@
 			<div class="heading_container heading_center">
 				<div class="topnav">
                 <p> Cerca la scarpa e scegli tra gli outift che ti proponiamo da abbinarci.</p>
-					<form method="GET" action="ricercaOutfit.php">
+					<form method="GET" action="scegliOutfit.php">
 						<input type="text" placeholder="Cerca.." name="search">
 						<button type="submit" ><i class="fa fa-search"></i></button>
 					</form>
 				</div>
 			</div>
 			<div class="row">
-
+				<!--<form method="GET" action="scegliOutfit.php">-->
 				<?php echo $html ?>
+				<!--</form>-->
 
 			</div>
 		</div>

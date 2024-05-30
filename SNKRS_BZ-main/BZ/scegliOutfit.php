@@ -13,43 +13,42 @@
 			inner join immagini immg on immg.FK_idItem=i.idItem
 			inner join siti s on s.idSito=ins.FK_idSito
 			inner join scarpe scarp on scarp.FK_idItem=i.idItem
-			where i.nome like '%$name%'";
+			where i.idItem like '%$name%'";
 
 			$data=eseguiquery($sql1);
 			//print_r($data);
 			$html1 = ""; 
-			for($i = 0;$i < count($data);$i++){
 			
-			$nome=$data[$i]["nome"];
+			$nome=$data[0]["nome"];
 			
 			if(strlen($nome)>40){
-			$nome=substr($data[$i]["nome"], 0, 40)."...";
+			$nome=substr($data[0]["nome"], 0, 40)."...";
 			}
 
-			if($data[$i]["idSito"]==1){
+			if($data[0]["idSito"]==1){
 				$html1.="
 				<div class='col-sm-6 col-md-4 col-lg-3'>
 				<div class='box'>
-					<a href='".$data[$i]["linkScarpa"]."'>
-					<span>
-						Scarpa selezionata
-					</span>
 					<div class='img-box'>
-						<img src={$data[$i]["imgPath"]} alt='errore'>
+						<img src={$data[0]["imgPath"]} alt='errore'>
 					</div>
 					<div class='detail-box'>
 						<h6> {$nome}</h6>
 						<h6>
 						</h6>
 					</div>
-					
-					</a>
+					<div >
+						<span class='new1'>
+						Scarpa selezionata
+						</span>
+					</div>
 				</div>
-				</div>";
+				</div>
+				";
 			}
 
 			}
-		}}
+		}
 		
 	$sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, vest.idVestiario
 	from item i

@@ -138,7 +138,7 @@
 					<i class="fa fa-quote-left" aria-hidden="true"></i>
 				  </div>
 				  <p>
-					Se cercate il paradiso delle scarpe online, non cercate oltre: Snkrs BZ è il vostro destino definitivo. Non solo vi offre una vasta selezione di calzature di alta qualità, ma vi guida anche nella creazione di outfit impeccabili per qualsiasi occasione.
+					Se cercate il paradiso delle scarpe online, non cercate oltre: Snkrs BZ è il vostro destino definitivo. Non solo vi offre una vasta selezione di calzature di alta qualità, ma vi guida anche nella creazione di outfit impeccabili.
 				  </p>
 				</div>
 			  </div>

@@ -28,7 +28,7 @@
 			if($data[0]["idSito"]==1){
 				$html1.="
 				<div class='col-sm-6 col-md-4 col-lg-3'>
-				<div class='box'>
+				<div class='box1'>
 					<div class='img-box'>
 						<img src={$data[0]["imgPath"]} alt='errore'>
 					</div>

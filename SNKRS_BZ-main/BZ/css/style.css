@@ -297,11 +297,34 @@ a:focus {
   margin-top: 25px;
 }
 
+.shop_section .box1 {
+  background-color: grey;
+  position: relative;
+  padding: 10px;
+  margin-top: 25px;
+}
+
 .shop_section .box a {
+  color: #000000;
+}
+.shop_section .box1 a {
   color: #000000;
 }
 
 .shop_section .box .img-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 15px 30px;
+  height: 245px;
+}
+.shop_section .box1 .img-box {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -319,6 +342,10 @@ a:focus {
   max-width: 100%;
   max-height: 145px;
 }
+.shop_section .box1 .img-box img {
+  max-width: 100%;
+  max-height: 145px;
+}
 
 .shop_section .box .detail-box {
   display: -webkit-box;
@@ -328,8 +355,19 @@ a:focus {
       -ms-flex-pack: justify;
           justify-content: space-between;
 }
+.shop_section .box1 .detail-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
 
 .shop_section .box .detail-box h6 span {
+  color: #db4f66;
+}
+.shop_section .box1 .detail-box h6 span {
   color: #db4f66;
 }
 
@@ -353,8 +391,28 @@ a:focus {
   font-size: 15px;
   
 }
+.shop_section .box .new {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #ffffff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 100%;
+  font-size: 15px;
+  
+}
 
-.shop_section .box .new1 {
+.shop_section .box1 .new1 {
   width: 235px;
   height: 50px;
   position: absolute;
@@ -370,7 +428,7 @@ a:focus {
       -ms-flex-align: center;
           align-items: center;
   font-size: 20px;
-  color: red;
+  color: brown;
 }
 
 .shop_section .btn-box {

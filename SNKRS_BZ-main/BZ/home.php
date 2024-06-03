@@ -59,7 +59,7 @@
                   </h6>
                   </div>
                   <div class='new'>
-                  <span>
+                  <span style='color: #004aad;'>
                       New
                   </span>
                   </div>

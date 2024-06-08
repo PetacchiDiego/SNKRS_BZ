@@ -7,13 +7,9 @@
 		
 		$name = $_GET['search'];
 		
-		$sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
-		from item i
-		inner join inserita ins on i.idItem=ins.FK_idItem
-		inner join immagini immg on immg.FK_idItem=i.idItem
-		inner join siti s on s.idSito=ins.FK_idSito
-		inner join scarpe scarp on scarp.FK_idItem=i.idItem
-		where i.nome like '%$name%'";
+		$sql="select id, nome, link, prezzo, linkImg
+        from hyperboost
+		where nome like '%$name%'";
         
 
 		$data=eseguiquery($sql);
@@ -28,8 +24,8 @@
 			$nome=substr($data[$i]["nome"], 0, 15)."...";
 		}
 
-		if($data[$i]["idSito"]==1){
-			$srcLogo="images/LogoSite/logoStokX.png";
+		if(strpos($data[$i]["link"] , "hypeboost.com")!=false){
+			$srcLogo="images/LogoSite/hyperboost.png";
 		}
 		else{
 			$srcLogo="images/LogoSite/logoKlekt.png";
@@ -38,16 +34,16 @@
 		$html.="
 			<div class='col-sm-6 col-md-4 col-lg-3'>
 			<div class='box'>
-				<a href='".$data[$i]["linkScarpa"]."'>
+				<a href='".$data[$i]["link"]."'>
 				<div class='img-box'>
-					<img src={$data[$i]["imgPath"]} alt='errore'>
+					<img src={$data[$i]["linkImg"]} alt='errore'>
 				</div>
 				<div class='detail-box'>
 					<h6> {$nome}</h6>
 					<h6>
 					Price
 					<span>
-					". $data[$i]["prezzoMedio"]."
+					". $data[$i]["prezzo"]."
 					</span>
 					</h6>
 				</div>

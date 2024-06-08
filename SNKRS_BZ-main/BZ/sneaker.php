@@ -1,55 +1,51 @@
 <?php
 	include("connect.php");
 
-	$sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
-			from item i
-			inner join inserita ins on i.idItem=ins.FK_idItem
-			inner join immagini immg on immg.FK_idItem=i.idItem
-			inner join siti s on s.idSito=ins.FK_idSito
-			inner join scarpe scarp on scarp.FK_idItem=i.idItem";
+	$sql="select id, nome, link, prezzo, linkImg
+        from hyperboost";
 
 	$data=eseguiquery($sql);
 	//print_r($data);
 	$html = ""; 
 	for($i = 0;$i < count($data);$i++){
-    
-    $nome=$data[$i]["nome"];
-    
-    if(strlen($nome)>15){
-      $nome=substr($data[$i]["nome"], 0, 15)."...";
-    }
+		
+		$nome=$data[$i]["nome"];
+		
+		if(strlen($nome)>15){
+		$nome=substr($data[$i]["nome"], 0, 15)."...";
+		}
+		//echo $data[$i]["link"];
+		if(strpos($data[$i]["link"] , "hypeboost.com")!=false){
+			$srcLogo="images/LogoSite/hyperboost.png";
+		}
+		else{
+			$srcLogo="images/LogoSite/logoKlekt.png";
+		}
 
-	if($data[$i]["idSito"]==1){
-		$srcLogo="images/LogoSite/logoStokX.png";
-	}
-	else{
-		$srcLogo="images/LogoSite/logoKlekt.png";
-	}
-
-    $html.="
-		<div class='col-sm-6 col-md-4 col-lg-3'>
-		<div class='box'>
-		<a href='".$data[$i]["linkScarpa"]."'>
-			<div class='img-box'>
-			<img src={$data[$i]["imgPath"]} alt='errore'>
-			</div>
-			<div class='detail-box'>
-			<h6> {$nome}</h6>
-			<h6>
-				Price
-				<span>
-				". $data[$i]["prezzoMedio"]."
+		$html.="
+			<div class='col-sm-6 col-md-4 col-lg-3'>
+			<div class='box'>
+			<a href='".$data[$i]["link"]."'>
+				<div class='img-box'>
+				<img src={$data[$i]["linkImg"]} alt='errore'>
+				</div>
+				<div class='detail-box'>
+				<h6> {$nome}</h6>
+				<h6>
+					Price
+					<span>
+					". $data[$i]["prezzo"]."
+					</span>
+				</h6>
+				</div>
+				<div >
+				<span class='new'>
+					<img src={$srcLogo} style='width:70%'>
 				</span>
-			</h6>
+				</div>
+			</a>
 			</div>
-			<div >
-			<span class='new'>
-				<img src={$srcLogo} style='width:70%'>
-			</span>
-			</div>
-		</a>
-		</div>
-	</div>";
+		</div>";
 
   	}
 

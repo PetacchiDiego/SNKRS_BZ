@@ -1,12 +1,8 @@
 <?php
     include("connect.php");
 
-    $sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
-          from item i
-          inner join inserita ins on i.idItem=ins.FK_idItem
-          inner join immagini immg on immg.FK_idItem=i.idItem
-          inner join siti s on s.idSito=ins.FK_idSito
-          inner join scarpe scarp on scarp.FK_idItem=i.idItem";
+    $sql="select id, nome, link, prezzo, linkImg
+        from hyperboost";
 
     $data=eseguiquery($sql);
 
@@ -20,7 +16,7 @@
 
     $numeri = range(0, count($data)-1);
     shuffle($numeri);
-    $cut= 8;
+    $cut= 4;
     $numeriCasuali = array_slice($numeri, 0, $cut); 
     //print_r($numeriCasuali);
     $arrIdusati=array();
@@ -28,13 +24,13 @@
       
       $index=$numeriCasuali[$i];
       if($i!=0){
-        while(in_array($data[$index]["idItem"], $arrIdusati)==true){
+        while(in_array($data[$index]["id"], $arrIdusati)==true){
           $index=$numeriCasuali[$i];
         }
 
       }
       else{
-        array_push($arrIdusati, $data[$index]["idItem"]);
+        array_push($arrIdusati, $data[$index]["id"]);
       }
       //print $index;
       $nome=$data[$index]["nome"];
@@ -45,16 +41,16 @@
       $html.="
           <div class='col-sm-6 col-md-4 col-lg-3'>
               <div class='box'>
-              <a href='".$data[$index]["linkScarpa"]."'>
+              <a href='".$data[$index]["link"]."'>
                   <div class='img-box'>
-                  <img src={$data[$index]["imgPath"]} alt='errore'>
+                  <img src={$data[$index]["linkImg"]} alt='errore'>
                   </div>
                   <div class='detail-box'>
                   <h6> {$nome}</h6>
                   <h6>
                       Price
                       <span>
-                      ". $data[$index]["prezzoMedio"]."
+                      ". $data[$index]["prezzo"]."
                       </span>
                   </h6>
                   </div>

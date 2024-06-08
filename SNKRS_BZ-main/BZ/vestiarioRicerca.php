@@ -151,7 +151,7 @@
 		<div class="container">
 			<div class="heading_container heading_center">
 				<div class="topnav">
-					<form method="GET" action="sneaker.php">
+					<form method="GET" action="vestiarioRicerca.php">
 						<input type="text" placeholder="Cerca.." name="search">
 						<button type="submit" ><i class="fa fa-search"></i></button>
 					</form>

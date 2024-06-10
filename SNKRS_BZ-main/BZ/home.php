@@ -1,9 +1,8 @@
 <?php
     include("connect.php");
 
-    $sql="select i.*, s.*
+    $sql="select i.*
         from item i
-        inner join sito s on s.id=i.idSito
         where tipologia=1";
 
     $data=eseguiquery($sql);
@@ -25,15 +24,6 @@
     for($i = 0;$i < 4;$i++){
       
       $index=$numeriCasuali[$i];
-      if($i!=0){
-        while(in_array($data[$index]["id"], $arrIdusati)==true){
-          $index=$numeriCasuali[$i];
-        }
-
-      }
-      else{
-        array_push($arrIdusati, $data[$index]["id"]);
-      }
       //print $index;
       $nome=$data[$index]["nome"];
       //print $nome;

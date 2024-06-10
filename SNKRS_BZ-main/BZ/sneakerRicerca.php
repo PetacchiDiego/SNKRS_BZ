@@ -8,7 +8,7 @@
 		$name = $_GET['search'];
 		
 		$sql="select *
-        from item<	
+        from item
 		where tipologia=1 and nome like '%$name%'";
         
 
@@ -24,11 +24,13 @@
 			$nome=substr($data[$i]["nome"], 0, 15)."...";
 		}
 
-		if(strpos($data[$i]["link"] , "hypeboost.com")!=false){
-			$srcLogo="images/LogoSite/hyperboost.png";
+		if($data[$i]["idSito"] == 1) {
+			$srcLogo = "images/LogoSite/hyperboost.png";
+		} if($data[$i]["idSito"]== 2) {
+			$srcLogo = "images/LogoSite/droplist.png";
 		}
-		else{
-			$srcLogo="images/LogoSite/logoKlekt.png";
+		if($data[$i]["idSito"]== 3) {
+			$srcLogo = "images/LogoSite/naked.png";
 		}
 
 		$html.="

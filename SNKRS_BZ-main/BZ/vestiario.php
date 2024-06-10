@@ -1,15 +1,30 @@
 <?php
   include("connect.php");
 
-  $sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, vest.idVestiario
-    from item i
-    inner join inserita ins on i.idItem=ins.FK_idItem
-    inner join immagini immg on immg.FK_idItem=i.idItem
-    inner join siti s on s.idSito=ins.FK_idSito
-    inner join vestiario vest on vest.FK_idItem=i.idItem";
+	// Imposta il numero di risultati per pagina
+	$results_per_page = 48;
 
-  $data=eseguiquery($sql);
-  //print_r($data);
+	// Calcola il numero totale di risultati nel database
+	$sql_total = "SELECT COUNT(id) AS total FROM item where tipologia=2";
+	$result_total = eseguiquery($sql_total);
+	$total_results = $result_total[0]['total'];
+
+	// Calcola il numero totale di pagine
+	$total_pages = ceil($total_results / $results_per_page);
+
+	// Determina la pagina corrente dall'URL, se non è impostata, usa la pagina 1
+	$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+	$page = max(1, min($page, $total_pages)); // Assicura che la pagina sia nel range valido
+
+	// Calcola il limite di partenza per la query
+	$start_limit = ($page - 1) * $results_per_page;
+
+	// Esegui la query per ottenere i risultati per la pagina corrente
+	$sql = "select i.* FROM item i where tipologia=2 LIMIT $start_limit, $results_per_page";
+	$data = eseguiquery($sql);
+	//print_r($data);
+
+
   $html = ""; 
   for($i = 0;$i < count($data);$i++){
     
@@ -18,27 +33,28 @@
     if(strlen($nome)>15){
       $nome=substr($data[$i]["nome"], 0, 15)."...";
     }
-
-    if($data[$i]["idSito"]==1){
-      $srcLogo="images/LogoSite/logoStokX.png";
+	if($data[$i]["idSito"] == 1) {
+        $srcLogo = "images/LogoSite/hyperboost.png";
+    } if($data[$i]["idSito"]== 2) {
+        $srcLogo = "images/LogoSite/droplist.png";
     }
-    else{
-      $srcLogo="images/LogoSite/logoKlekt.png";
-    }
+	if($data[$i]["idSito"]== 3) {
+		$srcLogo = "images/LogoSite/naked.png";
+	}
 
     $html.="
         <div class='col-sm-6 col-md-4 col-lg-3'>
           <div class='box'>
-            <a href='".$data[$i]["linkScarpa"]."'>
+            <a href='".$data[$i]["link"]."'>
               <div class='img-box'>
-                <img src={$data[$i]["imgPath"]} alt='errore'>
+                <img src={$data[$i]["linkImg"]} alt='errore'>
               </div>
               <div class='detail-box'>
                 <h6> {$nome}</h6>
                 <h6>
                   Price
                   <span>
-                  ". $data[$i]["prezzoMedio"]."
+                  ". $data[$i]["prezzo"]."
                   </span>
                 </h6>
               </div>
@@ -149,8 +165,21 @@
 			<div class="row">
 				
 				<?php echo $html ?>
-
-
+			</div>
+			<div class="pagination">
+				<span>Page</span>
+				<select onchange="location = this.value;">
+				<?php
+					for ($i = 1; $i <= $total_pages; $i++) {
+						$selected = ($i == $page) ? 'selected' : '';
+						echo "<option value='vestiario.php?page=$i' $selected>$i</option>";
+						}
+					?>
+				</select>
+				<span>of <?php echo $total_pages; ?></span>
+				<?php if ($page < $total_pages) { ?>
+					<a href="sneaker.php?page=<?php echo $page + 1; ?>">Next</a>
+				<?php } ?>
 			</div>
 		</div>
  	</section>

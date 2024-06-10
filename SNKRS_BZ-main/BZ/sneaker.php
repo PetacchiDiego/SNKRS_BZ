@@ -31,7 +31,7 @@ for($i = 0; $i < count($data); $i++) {
     if(strlen($nome) > 15) {
         $nome = substr($data[$i]["nome"], 0, 15) . "...";
     }
-    echo $data[$i]["idSito"];
+    //echo $data[$i]["idSito"];
     if($data[$i]["idSito"] == 1) {
         $srcLogo = "images/LogoSite/hyperboost.png";
     } if($data[$i]["idSito"]== 2) {

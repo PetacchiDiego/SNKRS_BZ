@@ -1,8 +1,10 @@
 <?php
     include("connect.php");
 
-    $sql="select id, nome, link, prezzo, linkImg
-        from hyperboost";
+    $sql="select i.*, s.*
+        from item i
+        inner join sito s on s.id=i.idSito
+        where tipologia=1";
 
     $data=eseguiquery($sql);
 

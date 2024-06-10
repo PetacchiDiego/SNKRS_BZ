@@ -7,6 +7,8 @@ from pprint import pprint
 LINK = "https://hypeboost.com/it/categoria/sneakers?p="
 PRE_LINK_ANNUNCIO = "https://hypeboost.com/it/prodotto/"
 IMG_PRE="https://img.hypeboost.com/products/"
+ID_SITO=1
+TIPOLOGIA=1 #scarpe
 
 page_num=136
 with open("dati.csv", "w") as file:
@@ -69,7 +71,9 @@ with open("dati.csv", "w") as file:
         print("Extracted Prices Names:")
         for span in price_products:
             #print(span[0:len(span)-1])
-            prices.append(span[0:len(span)-1])
+            spa=span[0:len(span)-1]
+            spa=spa.replace(".", "")
+            prices.append(spa)
 
         #print extracted 
         images=[]
@@ -81,7 +85,7 @@ with open("dati.csv", "w") as file:
 
         # Write extracted links to file
         for n in range(0,len(name_products),1):
-            file.write(links[n]+ ", " + names[n] + ", " + prices[n] + ", " + images[n] + "\n")
+            file.write(links[n]+ ", " + names[n] + ", " + prices[n] + ", " + images[n] + ", " + str(TIPOLOGIA) + ", " + str(ID_SITO) + "\n")
                 
 
             

@@ -7,9 +7,9 @@
 		
 		$name = $_GET['search'];
 		
-		$sql="select id, nome, link, prezzo, linkImg
-        from hyperboost
-		where nome like '%$name%'";
+		$sql="select *
+        from item<	
+		where tipologia=1 and nome like '%$name%'";
         
 
 		$data=eseguiquery($sql);

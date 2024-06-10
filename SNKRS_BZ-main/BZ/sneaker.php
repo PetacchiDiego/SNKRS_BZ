@@ -5,7 +5,7 @@ include("connect.php");
 $results_per_page = 48;
 
 // Calcola il numero totale di risultati nel database
-$sql_total = "SELECT COUNT(id) AS total FROM hyperboost";
+$sql_total = "SELECT COUNT(id) AS total FROM item where tipologia=1";
 $result_total = eseguiquery($sql_total);
 $total_results = $result_total[0]['total'];
 
@@ -20,8 +20,9 @@ $page = max(1, min($page, $total_pages)); // Assicura che la pagina sia nel rang
 $start_limit = ($page - 1) * $results_per_page;
 
 // Esegui la query per ottenere i risultati per la pagina corrente
-$sql = "SELECT id, nome, link, prezzo, linkImg FROM hyperboost LIMIT $start_limit, $results_per_page";
+$sql = "select i.* FROM item i where tipologia=1 LIMIT $start_limit, $results_per_page";
 $data = eseguiquery($sql);
+//print_r($data);
 
 $html = ""; 
 for($i = 0; $i < count($data); $i++) {
@@ -30,12 +31,15 @@ for($i = 0; $i < count($data); $i++) {
     if(strlen($nome) > 15) {
         $nome = substr($data[$i]["nome"], 0, 15) . "...";
     }
-    
-    if(strpos($data[$i]["link"], "hypeboost.com") !== false) {
+    echo $data[$i]["idSito"];
+    if($data[$i]["idSito"] == 1) {
         $srcLogo = "images/LogoSite/hyperboost.png";
-    } else {
-        $srcLogo = "images/LogoSite/logoKlekt.png";
+    } if($data[$i]["idSito"]== 2) {
+        $srcLogo = "images/LogoSite/droplist.png";
     }
+	if($data[$i]["idSito"]== 3) {
+		$srcLogo = "images/LogoSite/naked.png";
+	}
 
     $html .= "
         <div class='col-sm-6 col-md-4 col-lg-3'>

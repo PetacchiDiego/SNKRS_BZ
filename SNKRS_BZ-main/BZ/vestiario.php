@@ -1,6 +1,5 @@
 <?php
-  include("connect.php");
-
+	include("connect.php");
 	// Imposta il numero di risultati per pagina
 	$results_per_page = 48;
 
@@ -25,49 +24,49 @@
 	//print_r($data);
 
 
-  $html = ""; 
-  for($i = 0;$i < count($data);$i++){
+  	$html = ""; 
+  	for($i = 0;$i < count($data);$i++){
     
-    $nome=$data[$i]["nome"];
-    
-    if(strlen($nome)>15){
-      $nome=substr($data[$i]["nome"], 0, 15)."...";
-    }
-	if($data[$i]["idSito"] == 1) {
-        $srcLogo = "images/LogoSite/hyperboost.png";
-    } if($data[$i]["idSito"]== 2) {
-        $srcLogo = "images/LogoSite/droplist.png";
-    }
-	if($data[$i]["idSito"]== 3) {
-		$srcLogo = "images/LogoSite/naked.png";
-	}
+		$nome=$data[$i]["nome"];
+		
+		if(strlen($nome)>15){
+		$nome=substr($data[$i]["nome"], 0, 15)."...";
+		}
+		if($data[$i]["idSito"] == 1) {
+			$srcLogo = "images/LogoSite/hyperboost.png";
+		} if($data[$i]["idSito"]== 2) {
+			$srcLogo = "images/LogoSite/droplist.png";
+		}
+		if($data[$i]["idSito"]== 3) {
+			$srcLogo = "images/LogoSite/naked.png";
+		}
 
-    $html.="
-        <div class='col-sm-6 col-md-4 col-lg-3'>
-          <div class='box'>
-            <a href='".$data[$i]["link"]."'>
-              <div class='img-box'>
-                <img src={$data[$i]["linkImg"]} alt='errore'>
-              </div>
-              <div class='detail-box'>
-                <h6> {$nome}</h6>
-                <h6>
-                  Price
-                  <span>
-                  ". $data[$i]["prezzo"]."
-                  </span>
-                </h6>
-              </div>
-              <div >
-                <span class='new'>
-                  <img src={$srcLogo} style='width:70%'>
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>";
+		$html.="
+			<div class='col-sm-6 col-md-4 col-lg-3'>
+			<div class='box'>
+				<a href='".$data[$i]["link"]."'>
+				<div class='img-box'>
+					<img src={$data[$i]["linkImg"]} alt='errore'>
+				</div>
+				<div class='detail-box'>
+					<h6> {$nome}</h6>
+					<h6>
+					Price
+					<span>
+					". $data[$i]["prezzo"]."
+					</span>
+					</h6>
+				</div>
+				<div >
+					<span class='new'>
+					<img src={$srcLogo} style='width:70%'>
+					</span>
+				</div>
+				</a>
+			</div>
+			</div>";
 
-  }
+  	}
 
 
 

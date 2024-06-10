@@ -24,6 +24,7 @@ $sql = "select i.* FROM item i where tipologia=1 LIMIT $start_limit, $results_pe
 $data = eseguiquery($sql);
 //print_r($data);
 
+
 $html = ""; 
 for($i = 0; $i < count($data); $i++) {
     $nome = $data[$i]["nome"];
@@ -40,16 +41,16 @@ for($i = 0; $i < count($data); $i++) {
 	if($data[$i]["idSito"]== 3) {
 		$srcLogo = "images/LogoSite/naked.png";
 	}
-
+	
     $html .= "
         <div class='col-sm-6 col-md-4 col-lg-3'>
             <div class='box'>
                 <a href='" . $data[$i]["link"] . "'>
                     <div class='img-box'>
-                        <img src='" . $data[$i]["linkImg"] . "' alt='errore'>
+                        <img src='".$data[$i]["linkImg"]."' alt='errore'>
                     </div>
                     <div class='detail-box'>
-                        <h6> {$nome}</h6>
+                        <h6>$nome</h6>
                         <h6>
                             Price
                             <span>" . $data[$i]["prezzo"] . "</span>
@@ -57,7 +58,7 @@ for($i = 0; $i < count($data); $i++) {
                     </div>
                     <div>
                         <span class='new'>
-                            <img src='{$srcLogo}' style='width:70%'>
+                            <img src='$srcLogo' style='width:70%'>
                         </span>
                     </div>
                 </a>

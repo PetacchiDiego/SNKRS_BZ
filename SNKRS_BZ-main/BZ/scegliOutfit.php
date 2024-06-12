@@ -1,36 +1,33 @@
 <?php
 	include("connect.php");
-
+	$data1=null;
 	if ($_SERVER["REQUEST_METHOD"] == "GET") {
 		
 		if (isset($_GET['search'])) {
 			
-			$name = $_GET['search'];
+			$id = $_GET['search'];
+			//echo $id;
 
-			$sql1="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, scarp.idScarpa
-			from item i
-			inner join inserita ins on i.idItem=ins.FK_idItem
-			inner join immagini immg on immg.FK_idItem=i.idItem
-			inner join siti s on s.idSito=ins.FK_idSito
-			inner join scarpe scarp on scarp.FK_idItem=i.idItem
-			where i.idItem like '%$name%'";
+			$sql1="select *
+					from item
+					where id='$id'";
 
-			$data=eseguiquery($sql1);
+			$data1=eseguiquery($sql1);
 			//print_r($data);
 			$html1 = ""; 
 			
-			$nome=$data[0]["nome"];
+			$nome=$data1[0]["nome"];
 			
 			if(strlen($nome)>40){
-			$nome=substr($data[0]["nome"], 0, 40)."...";
+				$nome=substr($data1[0]["nome"], 0, 35)."...";
 			}
 
-			if($data[0]["idSito"]==1){
+			if($data1[0]["idSito"]==1){
 				$html1.="
 				<div class='col-sm-6 col-md-4 col-lg-3'>
 				<div class='box1'>
 					<div class='img-box'>
-						<img src={$data[0]["imgPath"]} alt='errore'>
+						<img src={$data1[0]["linkImg"]} alt='errore'>
 					</div>
 					<div class='detail-box'>
 						<h6> {$nome}</h6>
@@ -46,61 +43,121 @@
 				</div>
 				";
 			}
+			//$color=getDominantColorFromURL($data[0]["linkImg"])
 
+			
+		}
+		
+		$sql="select i.* FROM item i where tipologia=2 ";
+
+		$data=eseguiquery($sql);
+		//print_r($data);
+		$html = ""; 
+		for($i = 0;$i < count($data);$i++){
+			
+			$nome=$data[$i]["nome"];
+			
+			if(strlen($nome)>15){
+				$nome=substr($data[$i]["nome"], 0, 15)."...";
+			}
+
+			if($data[$i]["idSito"] == 1) {
+				$srcLogo = "images/LogoSite/hyperboost.png";
+			} if($data[$i]["idSito"]== 2) {
+				$srcLogo = "images/LogoSite/droplist.png";
+			}
+			if($data[$i]["idSito"]== 3) {
+				$srcLogo = "images/LogoSite/naked.png";
+			}
+			/*
+			$html.="
+				<div class='col-sm-6 col-md-4 col-lg-3'>
+				<div class='box'>
+					<a href='".$data[$i]["link"]."'>
+					<div class='img-box'>
+						<img src={$data[$i]["linkImg"]} alt='errore'>
+					</div>
+					<div class='detail-box'>
+						<h6> {$nome}</h6>
+						<h6>
+						Price
+						<span>
+						". $data[$i]["prezzo"]."
+						</span>
+						</h6>
+					</div>
+					<div >
+						<span class='new'>
+						<img src={$srcLogo} style='width:70%'>
+						</span>
+					</div>
+					</a>
+				</div>
+				</div>";
+			*/
+		}
+	}
+
+
+	
+
+	function getDominantColorFromURL($url) {
+		// Scaricare l'immagine dal link usando cURL
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		$imageData = curl_exec($ch);
+		curl_close($ch);
+		if ($imageData === FALSE) {
+			return false;
+		}
+	
+		// Creare l'immagine dalla stringa di dati binari
+		$image = imagecreatefromstring($imageData);
+	
+		if (!$image) {
+			return false;
+		}
+	
+		$width = imagesx($image);
+		$height = imagesy($image);
+	
+		$colors = [];
+	
+		// Iterare su ogni pixel
+		for ($x = 0; $x < $width; $x++) {
+			for ($y = 0; $y < $height; $y++) {
+				$rgb = imagecolorat($image, $x, $y);
+				$colors[] = $rgb;
 			}
 		}
-		
-	$sql="select i.idItem, i.nome, ins.linkScarpa, ins.prezzoMedio, immg.imgPath, s.idSito, vest.idVestiario
-	from item i
-	inner join inserita ins on i.idItem=ins.FK_idItem
-	inner join immagini immg on immg.FK_idItem=i.idItem
-	inner join siti s on s.idSito=ins.FK_idSito
-	inner join vestiario vest on vest.FK_idItem=i.idItem";
-
-	$data=eseguiquery($sql);
-	//print_r($data);
-	$html = ""; 
-	for($i = 0;$i < count($data);$i++){
-		
-		$nome=$data[$i]["nome"];
-		
-		if(strlen($nome)>15){
-		$nome=substr($data[$i]["nome"], 0, 15)."...";
-		}
-
-		if($data[$i]["idSito"]==1){
-		$srcLogo="images/LogoSite/logoStokX.png";
-		}
-		else{
-		$srcLogo="images/LogoSite/logoKlekt.png";
-		}
-
-		$html.="
-			<div class='col-sm-6 col-md-4 col-lg-3'>
-			<div class='box'>
-				<a href='".$data[$i]["linkScarpa"]."'>
-				<div class='img-box'>
-					<img src={$data[$i]["imgPath"]} alt='errore'>
-				</div>
-				<div class='detail-box'>
-					<h6> {$nome}</h6>
-					<h6>
-					Price
-					<span>
-					". $data[$i]["prezzoMedio"]."
-					</span>
-					</h6>
-				</div>
-				<div >
-					<span class='new'>
-					<img src={$srcLogo} style='width:70%'>
-					</span>
-				</div>
-				</a>
-			</div>
-			</div>";
-
+	
+		// Conta le occorrenze di ogni colore
+		$colorCounts = array_count_values($colors);
+	
+		// Trova il colore dominante
+		arsort($colorCounts);
+		$dominantColor = array_key_first($colorCounts);
+	
+		// Decomporre il colore RGB
+		$r = ($dominantColor >> 16) & 0xFF;
+		$g = ($dominantColor >> 8) & 0xFF;
+		$b = $dominantColor & 0xFF;
+	
+		return ['r' => $r, 'g' => $g, 'b' => $b];
 	}
+	
+	// URL dell'immagine
+	$imageUrl = ($data1[0]['linkImg']);echo $imageUrl;
+	$dominantColor = getDominantColorFromURL($imageUrl);
+	
+	if ($dominantColor) {
+		echo "Colore dominante: RGB(" . $dominantColor['r'] . ", " . $dominantColor['g'] . ", " . $dominantColor['b'] . ")";
+	} else {
+		echo "Impossibile scaricare o elaborare l'immagine.";
+	}
+	
+
 	
 ?>
 

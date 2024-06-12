@@ -301,12 +301,12 @@ a:focus {
 }
 
 .shop_section .box1 {
-  background-color: grey;
+  background-color: white;
   position: relative;
   padding: 10px;
   margin-top: 25px;
   border-style: solid;
-  border-color: grey;
+  border-color: red;
   border-radius: 8px;
 }
 
@@ -434,7 +434,7 @@ a:focus {
       -ms-flex-align: center;
           align-items: center;
   font-size: 20px;
-  color: brown;
+  color: red;
 }
 
 .shop_section .btn-box {

@@ -1,10 +1,28 @@
 <?php
 	include("connect.php");
 
-	$sql="select id, nome, link, prezzo, linkImg
-        from hyperboost";
+	// Imposta il numero di risultati per pagina
+	$results_per_page = 48;
 
-	$data=eseguiquery($sql);
+	// Calcola il numero totale di risultati nel database
+	$sql_total = "SELECT COUNT(id) AS total FROM item";
+	$result_total = eseguiquery($sql_total);
+	$total_results = $result_total[0]['total'];
+
+	// Calcola il numero totale di pagine
+	$total_pages = ceil($total_results / $results_per_page);
+
+	// Determina la pagina corrente dall'URL, se non è impostata, usa la pagina 1
+	$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+	$page = max(1, min($page, $total_pages)); // Assicura che la pagina sia nel range valido
+
+	// Calcola il limite di partenza per la query
+	$start_limit = ($page - 1) * $results_per_page;
+
+	// Esegui la query per ottenere i risultati per la pagina corrente
+	$sql = "SELECT * FROM item where tipologia=1 and idSito=1 LIMIT $start_limit, $results_per_page";
+	$data = eseguiquery($sql);
+
 	//print_r($data);
 	$html = ""; 
 	for($i = 0;$i < count($data);$i++){
@@ -12,7 +30,7 @@
 		$nome=$data[$i]["nome"];
 		
 		if(strlen($nome)>40){
-		$nome=substr($data[$i]["nome"], 0, 40)."...";
+		$nome=substr($data[$i]["nome"], 0, 35)."...";
 		}
 
 		
@@ -135,6 +153,21 @@
 				<?php echo $html ?>
 
 			</div>
+			<div class="pagination">
+					<span>Page</span>
+					<select onchange="location = this.value;">
+						<?php
+						for ($i = 1; $i <= $total_pages; $i++) {
+							$selected = ($i == $page) ? 'selected' : '';
+							echo "<option value='sneaker.php?page=$i' $selected>$i</option>";
+						}
+						?>
+					</select>
+					<span>of <?php echo $total_pages; ?></span>
+					<?php if ($page < $total_pages) { ?>
+						<a href="sneaker.php?page=<?php echo $page + 1; ?>">Next</a>
+					<?php } ?>
+				</div>
 		</div>
  	</section>
 

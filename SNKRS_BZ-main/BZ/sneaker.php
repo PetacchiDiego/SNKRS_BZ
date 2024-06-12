@@ -20,7 +20,7 @@ $page = max(1, min($page, $total_pages)); // Assicura che la pagina sia nel rang
 $start_limit = ($page - 1) * $results_per_page;
 
 // Esegui la query per ottenere i risultati per la pagina corrente
-$sql = "select i.* FROM item i where tipologia=1 LIMIT $start_limit, $results_per_page";
+$sql = "select i.* FROM item i where tipologia=1 order by i.idSito asc LIMIT $start_limit, $results_per_page";
 $data = eseguiquery($sql);
 //print_r($data);
 

@@ -177,7 +177,7 @@
 				</select>
 				<span>of <?php echo $total_pages; ?></span>
 				<?php if ($page < $total_pages) { ?>
-					<a href="sneaker.php?page=<?php echo $page + 1; ?>">Next</a>
+					<a href="vestiario.php?page=<?php echo $page + 1; ?>">Next</a>
 				<?php } ?>
 			</div>
 		</div>

@@ -14,6 +14,7 @@ create table item(
     nome varchar(255),
     prezzo float,
     linkImg varchar(255),
+    color varchar(255),
     tipologia enum('1', '2', '3'),
     idSito int,
     FOREIGN KEY (idSito) REFERENCES sito(id)

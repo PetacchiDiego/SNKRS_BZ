@@ -2,6 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from pprint import pprint
+import numpy as np
+from PIL import Image
+from io import BytesIO
 
 # Constants
 LINK = "https://nakedcph.com/collections/apparel?page="
@@ -10,6 +13,46 @@ IMG_PRE = "https:"
 EXCHANGE_RATE_DKK_TO_EUR = 0.134  
 ID_SITO=3
 TIPOLOGIA=2 #vestiario
+
+
+def get_dominant_color(image_url, excluded_color=(243, 243, 243)):
+    # Scarica l'immagine dall'URL
+    response = requests.get(image_url)
+    if response.status_code != 200:
+        raise Exception("Errore nel scaricare l'immagine")
+
+    # Crea un file in memoria dall'immagine scaricata
+    image_data = BytesIO(response.content)
+    image = Image.open(image_data)
+
+    # Converte l'immagine in RGB e ridimensiona per velocizzare il calcolo
+    image = image.convert("RGB")
+    image = image.resize((100, 100))  # Ridimensionamento per efficienza
+
+    # Converti l'immagine in un array numpy
+    pixels = np.array(image)
+
+    # Appiattisci l'array 2D in 1D
+    pixels = pixels.reshape(-1, 3)
+
+    # Filtra i pixel con il colore specificato
+    mask = (pixels[:, 0] != excluded_color[0]) | \
+           (pixels[:, 1] != excluded_color[1]) | \
+           (pixels[:, 2] != excluded_color[2])
+    filtered_pixels = pixels[mask]
+
+    if len(filtered_pixels) == 0:
+        return None  # Se tutti i pixel sono il colore escluso
+
+    # Conta le occorrenze di ogni colore
+    unique, counts = np.unique(filtered_pixels, axis=0, return_counts=True)
+
+    # Trova il colore con il conteggio massimo
+    dominant_color = unique[counts.argmax()]
+    #print(dominant_color)
+    return dominant_color
+
+
 
 page_num=27
 with open("datiNaked.csv", "w") as file:
@@ -41,6 +84,7 @@ with open("datiNaked.csv", "w") as file:
             prezzi = []
             prezzi_eur = []
             img_prodotti = []
+            color_prodotti = []
 
             # Itera su ogni prodotto e estrai i dati
             for product in products:
@@ -73,6 +117,11 @@ with open("datiNaked.csv", "w") as file:
                 img_url = IMG_PRE + img_tag['src'] if img_tag else "N/A"
                 img_prodotti.append(img_url)
 
+                #Estrai il colore 
+                dominant_color = get_dominant_color(img_url)
+                #print (dominant_color)
+                color_prodotti.append(dominant_color)
+
             # Stampa i dati estratti
             print("Link dei prodotti:")
             pprint(link_prodotti)
@@ -85,4 +134,5 @@ with open("datiNaked.csv", "w") as file:
         
             # Scrivi i dati estratti su un file CSV
             for i in range(len(link_prodotti)):
-                file.write(f"{link_prodotti[i]}, {nomi[i]}, {prezzi_eur[i]}, {img_prodotti[i]}, {TIPOLOGIA}, {ID_SITO}\n")
+                file.write(f"{link_prodotti[i]}, {nomi[i]}, {prezzi_eur[i]}, {img_prodotti[i]}, {color_prodotti[i]}, {TIPOLOGIA}, {ID_SITO}\n")
+

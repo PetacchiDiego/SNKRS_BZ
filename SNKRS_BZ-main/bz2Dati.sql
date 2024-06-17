@@ -31,6 +31,7 @@ CREATE TEMPORARY TABLE temp_item (
     nome VARCHAR(255),
     prezzo int,
     linkImg VARCHAR(255),
+    color varchar(255),
     tipologia enum('1', '2', '3')
 );
 
@@ -38,12 +39,12 @@ LOAD DATA INFILE 'C:\\xampp\\mysql\\data\\bz2\\datiNaked.csv'
 INTO TABLE temp_item
 FIELDS TERMINATED BY ',' 
 LINES TERMINATED BY '\n'
-(link, nome, prezzo, linkImg, tipologia);
+(link, nome, prezzo, linkImg, color, tipologia);
 
 DELETE FROM item WHERE idSito = 3;
 
-REPLACE INTO item (idSito, id, link, nome, prezzo, linkImg, tipologia)
-SELECT 3, id, link, nome, prezzo, linkImg, tipologia FROM temp_item;
+REPLACE INTO item (idSito, id, link, nome, prezzo, linkImg, color, tipologia)
+SELECT 3, id, link, nome, prezzo, linkImg, color, tipologia FROM temp_item;
 
 DROP TEMPORARY TABLE temp_item;
 

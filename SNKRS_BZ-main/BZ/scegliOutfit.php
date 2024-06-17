@@ -43,7 +43,6 @@
 				</div>
 				";
 			}
-			//$color=getDominantColorFromURL($data[0]["linkImg"])
 
 			
 		}
@@ -101,7 +100,7 @@
 
 	
 
-	function getDominantColorFromURL($url) {
+	function getDominantColorFromURL($url, $tolerance) {
 		// Scaricare l'immagine dal link usando cURL
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -128,8 +127,19 @@
 		for ($x = 0; $x < $width; $x++) {
 			for ($y = 0; $y < $height; $y++) {
 				$rgb = imagecolorat($image, $x, $y);
-				$colors[] = $rgb;
+				$r = ($rgb >> 16) & 0xFF;
+				$g = ($rgb >> 8) & 0xFF;
+				$b = $rgb & 0xFF;
+	
+				// Ignora pixel bianchi o quasi bianchi
+				if ($r <= $tolerance && $g <= $tolerance && $b <= $tolerance) {
+					$colors[] = $rgb;
+				}
 			}
+		}
+	
+		if (empty($colors)) {
+			return false;  // Ritorna false se tutti i pixel erano bianchi
 		}
 	
 		// Conta le occorrenze di ogni colore
@@ -146,15 +156,53 @@
 	
 		return ['r' => $r, 'g' => $g, 'b' => $b];
 	}
+
+	//funzione per calcolo della distanza tra due colori
+	function colorSimilarity($color1, $color2) {
+		$r1 = $color1['r'];
+		$g1 = $color1['g'];
+		$b1 = $color1['b'];
 	
-	// URL dell'immagine
-	$imageUrl = ($data1[0]['linkImg']);echo $imageUrl;
-	$dominantColor = getDominantColorFromURL($imageUrl);
+		$r2 = $color2['r'];
+		$g2 = $color2['g'];
+		$b2 = $color2['b'];
 	
-	if ($dominantColor) {
-		echo "Colore dominante: RGB(" . $dominantColor['r'] . ", " . $dominantColor['g'] . ", " . $dominantColor['b'] . ")";
-	} else {
+		// Calcolo della distanza Euclidea
+		$distance = sqrt(
+			pow($r1 - $r2, 2) +
+			pow($g1 - $g2, 2) +
+			pow($b1 - $b2, 2)
+		);
+	
+		return $distance;
+	}
+	
+	//echo $data1[0]['id'];
+	$imageUrl = trim($data1[0]['linkImg']);
+	//echo "URL immagine: " . $imageUrl . "<br>";
+	$dominantColorScarpa = getDominantColorFromURL($imageUrl, 245);
+	
+	if ($dominantColorScarpa==false) {
 		echo "Impossibile scaricare o elaborare l'immagine.";
+	} else {
+		echo $colore;
+		$sql="select * from item where tipologia=2";
+		$data3=eseguiquery($sql);
+
+		
+		for($i = 0;$i < 5;$i++){
+			$d=$data3[$i]['color'];
+			$d=replace()
+			$dominantColorVestiario = substr($data3[$i]['color'], 1, );
+			echo $dominantColorVestiario;
+			$distance=colorSimilarity($dominantColorScarpa, $dominantColorVestiario);
+			if($distance<10){
+				//echo $data3[$i]['linkImg'];
+			}
+
+
+
+		}
 	}
 	
 

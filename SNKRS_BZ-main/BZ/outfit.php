@@ -159,13 +159,13 @@
 						<?php
 						for ($i = 1; $i <= $total_pages; $i++) {
 							$selected = ($i == $page) ? 'selected' : '';
-							echo "<option value='sneaker.php?page=$i' $selected>$i</option>";
+							echo "<option value='outfit.php?page=$i' $selected>$i</option>";
 						}
 						?>
 					</select>
 					<span>of <?php echo $total_pages; ?></span>
 					<?php if ($page < $total_pages) { ?>
-						<a href="sneaker.php?page=<?php echo $page + 1; ?>">Next</a>
+						<a href="outfit.php?page=<?php echo $page + 1; ?>">Next</a>
 					<?php } ?>
 				</div>
 		</div>

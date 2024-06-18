@@ -1,5 +1,6 @@
 <?php
 	include("connect.php");
+
 	$data1=null;
 	if ($_SERVER["REQUEST_METHOD"] == "GET") {
 		
@@ -51,50 +52,7 @@
 
 		$data=eseguiquery($sql);
 		//print_r($data);
-		$html = ""; 
-		for($i = 0;$i < count($data);$i++){
-			
-			$nome=$data[$i]["nome"];
-			
-			if(strlen($nome)>15){
-				$nome=substr($data[$i]["nome"], 0, 15)."...";
-			}
-
-			if($data[$i]["idSito"] == 1) {
-				$srcLogo = "images/LogoSite/hyperboost.png";
-			} if($data[$i]["idSito"]== 2) {
-				$srcLogo = "images/LogoSite/droplist.png";
-			}
-			if($data[$i]["idSito"]== 3) {
-				$srcLogo = "images/LogoSite/naked.png";
-			}
-			/*
-			$html.="
-				<div class='col-sm-6 col-md-4 col-lg-3'>
-				<div class='box'>
-					<a href='".$data[$i]["link"]."'>
-					<div class='img-box'>
-						<img src={$data[$i]["linkImg"]} alt='errore'>
-					</div>
-					<div class='detail-box'>
-						<h6> {$nome}</h6>
-						<h6>
-						Price
-						<span>
-						". $data[$i]["prezzo"]."
-						</span>
-						</h6>
-					</div>
-					<div >
-						<span class='new'>
-						<img src={$srcLogo} style='width:70%'>
-						</span>
-					</div>
-					</a>
-				</div>
-				</div>";
-			*/
-		}
+		
 	}
 
 
@@ -181,29 +139,117 @@
 	$imageUrl = trim($data1[0]['linkImg']);
 	//echo "URL immagine: " . $imageUrl . "<br>";
 	$dominantColorScarpa = getDominantColorFromURL($imageUrl, 245);
-	
+	//print_r($dominantColorScarpa);
 	if ($dominantColorScarpa==false) {
 		echo "Impossibile scaricare o elaborare l'immagine.";
 	} else {
-		echo $colore;
-		$sql="select * from item where tipologia=2";
-		$data3=eseguiquery($sql);
+		$sql = "select * from item where tipologia=2";
+		$data3 = eseguiquery($sql);
 
-		
-		for($i = 0;$i < 5;$i++){
-			$d=$data3[$i]['color'];
-			$d=replace()
-			$dominantColorVestiario = substr($data3[$i]['color'], 1, );
-			echo $dominantColorVestiario;
-			$distance=colorSimilarity($dominantColorScarpa, $dominantColorVestiario);
-			if($distance<10){
-				//echo $data3[$i]['linkImg'];
+		// Array per memorizzare i colori più simili
+		$arrayColoriSimili = [];
+
+		// Parametri
+		$maxSimilarItems = 5;
+		$html3 = "";
+		// Loop attraverso $data3
+		for ($i = 0; $i < count($data3); $i++) {
+			$d = $data3[$i]['color'];
+
+			// Rimozione delle parentesi quadre
+			$d = str_replace(['[', ']'], '', $d);
+
+			// Rimozione degli spazi iniziali e finali e suddivisione usando preg_split per gestire spazi multipli
+			$d = trim($d);
+			$rgbArray = preg_split('/\s+/', $d);
+
+			if (count($rgbArray) === 3) {
+				// Assegnazione dei valori RGB
+				list($r, $g, $b) = $rgbArray;
+				$colorArray = [
+					'r' => $r,
+					'g' => $g,
+					'b' => $b
+				];
+
+				// Calcolo della distanza
+				$distance = colorSimilarity($dominantColorScarpa, $colorArray);
+
+				// Creazione dell'array per i colori simili
+				$arraySimili = [
+					'distance' => $distance,
+					'id' => $data3[$i]["id"],
+					'nome' => $data3[$i]["nome"],
+					'prezzo' => $data3[$i]["prezzo"],
+					'linkImg' => $data3[$i]["linkImg"],
+					'link' => $data3[$i]["link"]
+				];
+
+				// Aggiunta e mantenimento dei 5 valori più vicini
+				if (count($arrayColoriSimili) < $maxSimilarItems) {
+					$arrayColoriSimili[] = $arraySimili;
+				} else {
+					// Trova il valore massimo di distanza
+					$maxIndex = -1;
+					$maxDistance = -1;
+					foreach ($arrayColoriSimili as $index => $item) {
+						if ($item['distance'] > $maxDistance) {
+							$maxDistance = $item['distance'];
+							$maxIndex = $index;
+						}
+					}
+					// Sostituisci se la distanza corrente è minore della distanza massima trovata
+					if ($distance < $maxDistance) {
+						$arrayColoriSimili[$maxIndex] = $arraySimili;
+					}
+				}
+
+				// Creazione dell'HTML solo se la distanza è inferiore a 50
+				if ($distance < 50) {
+					$nome = $data3[$i]["nome"];
+
+					if (strlen($nome) > 15) {
+						$nome = substr($data3[$i]["nome"], 0, 15) . "...";
+					}
+
+					$srcLogo = "";
+					if ($data3[$i]["idSito"] == 1) {
+						$srcLogo = "images/LogoSite/hyperboost.png";
+					} elseif ($data3[$i]["idSito"] == 2) {
+						$srcLogo = "images/LogoSite/droplist.png";
+					} elseif ($data3[$i]["idSito"] == 3) {
+						$srcLogo = "images/LogoSite/naked.png";
+					}
+
+					$html3 .= "
+						<div class='col-sm-6 col-md-4 col-lg-3'>
+							<div class='box'>
+								<a href='" . $data3[$i]["link"] . "'>
+									<div class='img-box'>
+										<img src='" . $data3[$i]["linkImg"] . "' alt='errore'>
+									</div>
+									<div class='detail-box'>
+										<h6>$nome</h6>
+										<h6>
+											Price
+											<span>" . $data3[$i]["prezzo"] . "</span>
+										</h6>
+									</div>
+									<div>
+										<span class='new'>
+											<img src='$srcLogo' style='width:70%'>
+										</span>
+									</div>
+								</a>
+							</div>
+						</div>";
+				}
+			} else {
+				echo "Errore nella stringa colore per: ".$d."<br>";
 			}
-
-
-
 		}
 	}
+
 	
 
 	
@@ -297,8 +343,9 @@
 			</div>
 			<div class="row">
 				<?php echo $html1; ?>
-				<?php echo $html; ?>
+				<?php echo $html3; ?>
 			</div>
+			
 		</div>
  	</section>
 

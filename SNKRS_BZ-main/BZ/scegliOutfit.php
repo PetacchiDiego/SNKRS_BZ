@@ -2,12 +2,13 @@
 	include("connect.php");
 
 	$data1=null;
+
+	//stampa scarpa selezionata
 	if ($_SERVER["REQUEST_METHOD"] == "GET") {
 		
 		if (isset($_GET['search'])) {
 			
 			$id = $_GET['search'];
-			//echo $id;
 
 			$sql1="select *
 					from item
@@ -48,16 +49,11 @@
 			
 		}
 		
-		$sql="select i.* FROM item i where tipologia=2 ";
-
-		$data=eseguiquery($sql);
-		//print_r($data);
-		
 	}
 
 
 	
-
+	//funzione estrazione colore dominante
 	function getDominantColorFromURL($url, $tolerance) {
 		// Scaricare l'immagine dal link usando cURL
 		$ch = curl_init($url);
@@ -135,24 +131,28 @@
 		return $distance;
 	}
 	
-	//echo $data1[0]['id'];
+	
 	$imageUrl = trim($data1[0]['linkImg']);
 	//echo "URL immagine: " . $imageUrl . "<br>";
+
+	//funzione estrazione colore dominante escludento il colore 254 per lo sfondo
 	$dominantColorScarpa = getDominantColorFromURL($imageUrl, 245);
 	//print_r($dominantColorScarpa);
+
 	if ($dominantColorScarpa==false) {
 		echo "Impossibile scaricare o elaborare l'immagine.";
 	} else {
 		$sql = "select * from item where tipologia=2";
 		$data3 = eseguiquery($sql);
 
-		// Array per memorizzare i colori più simili
+		// Array per memorizzare i colori simili e opposti
 		$arrayColoriSimili = [];
+		$arrayColoriOpposti = [];
 
-		// Parametri
+		
 		$maxSimilarItems = 5;
 		$html3 = "";
-		// Loop attraverso $data3
+		
 		for ($i = 0; $i < count($data3); $i++) {
 			$d = $data3[$i]['color'];
 
@@ -164,7 +164,6 @@
 			$rgbArray = preg_split('/\s+/', $d);
 
 			if (count($rgbArray) === 3) {
-				// Assegnazione dei valori RGB
 				list($r, $g, $b) = $rgbArray;
 				$colorArray = [
 					'r' => $r,
@@ -172,87 +171,152 @@
 					'b' => $b
 				];
 
-				// Calcolo della distanza
 				$distance = colorSimilarity($dominantColorScarpa, $colorArray);
 
-				// Creazione dell'array per i colori simili
-				$arraySimili = [
+				// Creazione dell'array per i colori
+				$arrayColor = [
 					'distance' => $distance,
 					'id' => $data3[$i]["id"],
 					'nome' => $data3[$i]["nome"],
 					'prezzo' => $data3[$i]["prezzo"],
 					'linkImg' => $data3[$i]["linkImg"],
-					'link' => $data3[$i]["link"]
+					'link' => $data3[$i]["link"],
+					'idSito' => $data3[$i]["idSito"]
 				];
 
-				// Aggiunta e mantenimento dei 5 valori più vicini
+				//CALCOLO I COLORI SIMILI
 				if (count($arrayColoriSimili) < $maxSimilarItems) {
-					$arrayColoriSimili[] = $arraySimili;
+					$arrayColoriSimili[] = $arrayColor;
 				} else {
 					// Trova il valore massimo di distanza
 					$maxIndex = -1;
 					$maxDistance = -1;
-					foreach ($arrayColoriSimili as $index => $item) {
-						if ($item['distance'] > $maxDistance) {
-							$maxDistance = $item['distance'];
+					foreach ($arrayColoriSimili as $index => $simile) {
+						if ($simile['distance'] > $maxDistance) {
+							$maxDistance = $simile['distance'];
+							$maxIndex = $index;
+						}
+					}
+					
+					// Sostituisci se la distanza corrente è minore della distanza massima trovata
+					if ($distance < $maxDistance) {
+						$arrayColoriSimili[$maxIndex] = $arrayColor;
+						
+					}
+				}
+
+				//CALCOLO IL COLORE OPPOSTO A QUELLO DELLA SCARPA E GUARDO QUALI COLORI SONO PIU VICINI
+				$colorOppostoArray = [
+					'r' => 255-$dominantColorScarpa['r'],
+					'g' => 255-$dominantColorScarpa['g'],
+					'b' => 255-$dominantColorScarpa['b']
+				];
+				$distance2 = colorSimilarity($colorOppostoArray, $colorArray);
+	
+				if (count($arrayColoriOpposti) < $maxSimilarItems) {
+					$arrayColoriOpposti[] = $arrayColor;
+				} else {
+					// Trova il valore massimo di distanza
+					$maxIndex = -1;
+					$maxDistance = -1;
+					foreach ($arrayColoriSimili as $index => $simile) {
+						if ($simile['distance'] > $maxDistance) {
+							$maxDistance = $simile['distance'];
 							$maxIndex = $index;
 						}
 					}
 					// Sostituisci se la distanza corrente è minore della distanza massima trovata
-					if ($distance < $maxDistance) {
-						$arrayColoriSimili[$maxIndex] = $arraySimili;
+					if ($distance2 < $maxDistance) {
+						$arrayColoriOpposti[$maxIndex] = $arrayColor;
 					}
-				}
-
-				// Creazione dell'HTML solo se la distanza è inferiore a 50
-				if ($distance < 50) {
-					$nome = $data3[$i]["nome"];
-
-					if (strlen($nome) > 15) {
-						$nome = substr($data3[$i]["nome"], 0, 15) . "...";
-					}
-
-					$srcLogo = "";
-					if ($data3[$i]["idSito"] == 1) {
-						$srcLogo = "images/LogoSite/hyperboost.png";
-					} elseif ($data3[$i]["idSito"] == 2) {
-						$srcLogo = "images/LogoSite/droplist.png";
-					} elseif ($data3[$i]["idSito"] == 3) {
-						$srcLogo = "images/LogoSite/naked.png";
-					}
-
-					$html3 .= "
-						<div class='col-sm-6 col-md-4 col-lg-3'>
-							<div class='box'>
-								<a href='" . $data3[$i]["link"] . "'>
-									<div class='img-box'>
-										<img src='" . $data3[$i]["linkImg"] . "' alt='errore'>
-									</div>
-									<div class='detail-box'>
-										<h6>$nome</h6>
-										<h6>
-											Price
-											<span>" . $data3[$i]["prezzo"] . "</span>
-										</h6>
-									</div>
-									<div>
-										<span class='new'>
-											<img src='$srcLogo' style='width:70%'>
-										</span>
-									</div>
-								</a>
-							</div>
-						</div>";
 				}
 			} else {
 				echo "Errore nella stringa colore per: ".$d."<br>";
 			}
 		}
+		
+		//STAMPO VALORI DEI ITEM CON COLORE SIMILE
+		for($i=0;$i<count($arrayColoriSimili);$i++) {
+			$nome = $arrayColoriSimili[$i]["nome"];
+
+			if (strlen($nome) > 15) {
+				$nome = substr($arrayColoriSimili[$i]["nome"], 0, 15) . "...";
+			}
+
+			$srcLogo = "";
+			if ($arrayColoriSimili[$i]["idSito"] == 1) {
+				$srcLogo = "images/LogoSite/hyperboost.png";
+			} elseif ($arrayColoriSimili[$i]["idSito"] == 2) {
+				$srcLogo = "images/LogoSite/droplist.png";
+			} elseif ($arrayColoriSimili[$i]["idSito"] == 3) {
+				$srcLogo = "images/LogoSite/naked.png";
+			}
+
+			$html3 .= "
+				<div class='col-sm-6 col-md-4 col-lg-3'>
+					<div class='box'>
+						<a href='" . $arrayColoriSimili[$i]["link"] . "'>
+							<div class='img-box'>
+								<img src='" . $arrayColoriSimili[$i]["linkImg"] . "' alt='errore'>
+							</div>
+							<div class='detail-box'>
+								<h6>$nome</h6>
+								<h6>
+									Price
+									<span>" . $arrayColoriSimili[$i]["prezzo"] . "</span>
+								</h6>
+							</div>
+							<div>
+								<span class='new'>
+									<img src='$srcLogo' style='width:70%'>
+								</span>
+							</div>
+						</a>
+					</div>
+				</div>";
+		}
+
+		//STAMPO VALORI DEI ITEM CON COLORE OPPOSTO
+		for($i=0;$i<count($arrayColoriOpposti);$i++) {
+			$nome = $arrayColoriOpposti[$i]["nome"];
+
+			if (strlen($nome) > 15) {
+				$nome = substr($arrayColoriOpposti[$i]["nome"], 0, 15) . "...";
+			}
+
+			$srcLogo = "";
+			if ($arrayColoriOpposti[$i]["idSito"] == 1) {
+				$srcLogo = "images/LogoSite/hyperboost.png";
+			} elseif ($arrayColoriOpposti[$i]["idSito"] == 2) {
+				$srcLogo = "images/LogoSite/droplist.png";
+			} elseif ($arrayColoriOpposti[$i]["idSito"] == 3) {
+				$srcLogo = "images/LogoSite/naked.png";
+			}
+
+			$html3 .= "
+				<div class='col-sm-6 col-md-4 col-lg-3'>
+					<div class='box'>
+						<a href='" . $arrayColoriOpposti[$i]["link"] . "'>
+							<div class='img-box'>
+								<img src='" . $arrayColoriOpposti[$i]["linkImg"] . "' alt='errore'>
+							</div>
+							<div class='detail-box'>
+								<h6>$nome</h6>
+								<h6>
+									Price
+									<span>" . $arrayColoriOpposti[$i]["prezzo"] . "</span>
+								</h6>
+							</div>
+							<div>
+								<span class='new'>
+									<img src='$srcLogo' style='width:70%'>
+								</span>
+							</div>
+						</a>
+					</div>
+				</div>";
+		}
 	}
-
-	
-
-	
 ?>
 
 <!DOCTYPE html>
@@ -345,7 +409,11 @@
 				<?php echo $html1; ?>
 				<?php echo $html3; ?>
 			</div>
-			
+			<div class="btn-box" style="align: center">
+            	<a href="outfit.php">
+            	 	Back to all 
+        	    </a>
+			</div>
 		</div>
  	</section>
 
